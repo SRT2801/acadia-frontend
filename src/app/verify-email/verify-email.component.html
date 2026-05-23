@@ -1,0 +1,82 @@
+<div class="fixed inset-0 linear-gradient-bg pointer-events-none"></div>
+<div class="fixed top-0 left-1/4 w-px h-full bg-surface-container-high/20"></div>
+<div class="fixed top-0 right-1/4 w-px h-full bg-surface-container-high/20"></div>
+
+<main class="relative z-10 w-full max-w-100 px-md mx-auto flex-1 flex flex-col justify-center">
+  <app-card>
+    <app-card-header>
+      <div
+        class="w-12 h-12 flex items-center justify-center rounded-lg bg-surface-container-high border border-surface-container-highest">
+        <app-logo />
+      </div>
+      <h1 class="text-headline-md text-on-surface m-0">Acadia</h1>
+      <span class="text-label-caps text-on-surface-variant">Academic Workspace</span>
+    </app-card-header>
+
+    <app-card-content>
+      @if (state() === 'no-token') {
+        <div class="fade-in flex flex-col items-center text-center py-lg">
+          <div
+            class="w-12 h-12 rounded-full bg-primary-container/20 border border-primary flex items-center justify-center mb-lg">
+            <span class="material-symbols-outlined text-primary text-[24px]">mark_email_unread</span>
+          </div>
+          <h2 class="text-headline-md text-on-surface mb-xs">Check your email</h2>
+          <p class="text-body-sm text-on-surface-variant mb-xl">
+            We've sent a verification link to your email address. Please check your inbox and click the link to activate your account.
+          </p>
+          <p class="text-body-sm text-on-surface-variant">
+            Didn't receive the email? <a href="#" class="text-primary hover:text-primary-fixed-dim transition-colors">Resend verification</a>
+          </p>
+          <a routerLink="/login" class="mt-md text-body-sm text-primary hover:text-primary-fixed-dim transition-colors">
+            Back to Login
+          </a>
+        </div>
+      }
+
+      @if (state() === 'loading') {
+        <div class="fade-in flex flex-col items-center text-center py-lg">
+          <div class="spinner mb-lg"></div>
+          <h2 class="text-headline-md text-on-surface mb-xs">Verifying your email...</h2>
+          <p class="text-body-sm text-on-surface-variant">Please hold on while we secure your account access.</p>
+        </div>
+      }
+
+      @if (state() === 'success') {
+        <div class="fade-in flex flex-col items-center text-center py-lg">
+          <div
+            class="w-12 h-12 rounded-full bg-secondary-container/20 border border-secondary flex items-center justify-center mb-lg">
+            <span class="material-symbols-outlined text-secondary text-[24px]">check_circle</span>
+          </div>
+          <h2 class="text-headline-md text-on-surface mb-xs">Email verified!</h2>
+          <p class="text-body-sm text-on-surface-variant mb-xl">Your academic profile is now active and ready for use.</p>
+          <button ui-button class="w-full mt-sm" routerLink="/login">
+            Continue to Login
+          </button>
+        </div>
+      }
+
+      @if (state() === 'error') {
+        <div class="fade-in flex flex-col items-center text-center py-lg">
+          <div
+            class="w-12 h-12 rounded-full bg-error-container/20 border border-error flex items-center justify-center mb-lg">
+            <span class="material-symbols-outlined text-error text-[24px]">error</span>
+          </div>
+          <h2 class="text-headline-md text-on-surface mb-xs">Verification failed</h2>
+          <p class="text-body-sm text-on-surface-variant mb-xl">{{ errorMessage() }}</p>
+          <button ui-button variant="secondary" class="w-full mt-sm">
+            Resend Verification Email
+          </button>
+          <a routerLink="/login" class="mt-md text-body-sm text-primary hover:text-primary-fixed-dim transition-colors">
+            Back to Login
+          </a>
+        </div>
+      }
+    </app-card-content>
+  </app-card>
+
+  <div class="mt-lg text-center">
+    <p class="text-body-sm text-on-surface-variant">
+      Need help? <a href="#" class="text-primary hover:text-primary-fixed-dim transition-colors">Contact Academic Support</a>
+    </p>
+  </div>
+</main>
