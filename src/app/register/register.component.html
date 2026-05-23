@@ -1,0 +1,108 @@
+<div class="fixed inset-0 linear-gradient-bg pointer-events-none"></div>
+<div class="fixed top-0 left-1/4 w-px h-full bg-surface-container-high/20"></div>
+<div class="fixed top-0 right-1/4 w-px h-full bg-surface-container-high/20"></div>
+
+<main class="relative z-10 w-full max-w-160 px-md mx-auto flex-1 overflow-y-auto flex flex-col justify-center py-xl">
+  <div class="w-full m-auto">
+    <app-card>
+      <app-card-header>
+        <div
+          class="w-12 h-12 flex items-center justify-center rounded-lg bg-surface-container-high border border-surface-container-highest">
+          <app-logo />
+        </div>
+        <h1 class="text-headline-md text-on-surface m-0">Create your account</h1>
+        <span class="text-body-sm text-on-surface-variant">Join the Acadia academic workspace</span>
+      </app-card-header>
+
+      <app-card-content>
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-md">
+          <div class="flex gap-md">
+            <div class="flex flex-col gap-xs flex-1">
+              <label for="firstName" class="text-body-sm text-on-surface">First Name</label>
+              <input id="firstName" type="text" ui-input [hasError]="isFieldInvalid('firstName')"
+                formControlName="firstName" autocomplete="given-name" placeholder="John" />
+            </div>
+            <div class="flex flex-col gap-xs flex-1">
+              <label for="lastName" class="text-body-sm text-on-surface">Last Name</label>
+              <input id="lastName" type="text" ui-input [hasError]="isFieldInvalid('lastName')"
+                formControlName="lastName" autocomplete="family-name" placeholder="Doe" />
+            </div>
+          </div>
+
+          <div class="flex gap-md">
+            <div class="flex flex-col gap-xs flex-1">
+              <label for="username" class="text-body-sm text-on-surface">Username</label>
+              <div class="relative">
+                <span
+                  class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[18px] text-on-surface-variant pointer-events-none">person</span>
+                <input id="username" type="text" ui-input [hasError]="isFieldInvalid('username')" [iconLeft]="true"
+                  formControlName="username" autocomplete="username" placeholder="johndoe" />
+              </div>
+            </div>
+            <div class="flex flex-col gap-xs flex-1">
+              <label for="email" class="text-body-sm text-on-surface">Email Address</label>
+              <div class="relative">
+                <span
+                  class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[18px] text-on-surface-variant pointer-events-none">mail</span>
+                <input id="email" type="email" ui-input [hasError]="isFieldInvalid('email')" [iconLeft]="true"
+                  formControlName="email" autocomplete="email" placeholder="john@university.edu" />
+              </div>
+            </div>
+          </div>
+
+          <div class="flex gap-md">
+            <div class="flex flex-col gap-xs flex-1">
+              <label for="universityId" class="text-body-sm text-on-surface">University ID</label>
+              <div class="relative">
+                <span
+                  class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[18px] text-on-surface-variant pointer-events-none">badge</span>
+                <input id="universityId" type="text" ui-input [hasError]="isFieldInvalid('universityId')"
+                  [iconLeft]="true" formControlName="universityId" autocomplete="off" placeholder="e.g. STU-2024-001" />
+              </div>
+            </div>
+            <div class="flex flex-col gap-xs flex-1">
+              <label for="password" class="text-body-sm text-on-surface">Password</label>
+              <div class="relative">
+                <span
+                  class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[18px] text-on-surface-variant pointer-events-none">lock</span>
+                <input id="password" [type]="showPassword() ? 'text' : 'password'" ui-input
+                  [hasError]="isFieldInvalid('password')" [iconLeft]="true" [iconRight]="true"
+                  formControlName="password" autocomplete="new-password" placeholder="Create a strong password" />
+                <button type="button" (click)="togglePassword()"
+                  class="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface transition-colors focus:outline-none flex">
+                  <span class="material-symbols-outlined text-[18px]">
+                    {{ showPassword() ? 'visibility_off' : 'visibility' }}
+                  </span>
+                </button>
+              </div>
+              <div class="flex items-center gap-sm mt-1">
+                <div class="flex gap-[3px] flex-1">
+                  @for (i of [1,2,3,4]; track i) {
+                  <div class="h-1 flex-1 rounded-full transition-colors"
+                    [class]="i <= passwordStrength().level ? strengthColors[passwordStrength().level] : 'bg-surface-container-highest'">
+                  </div>
+                  }
+                </div>
+                <span class="text-label-caps text-on-surface-variant shrink-0">
+                  Strength: {{ passwordStrength().label }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" ui-button [disabled]="registerForm.invalid || isSubmitting()" class="mt-sm">
+            {{ isSubmitting() ? 'Creating account...' : 'Create Account' }}
+            @if (!isSubmitting()) {
+            <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+            }
+          </button>
+
+          <div class="text-center text-body-sm text-on-surface-variant">
+            Already have an account?
+            <a routerLink="/login" class="text-primary hover:text-primary-fixed-dim transition-colors">Sign In</a>
+          </div>
+        </form>
+      </app-card-content>
+    </app-card>
+  </div>
+</main>
