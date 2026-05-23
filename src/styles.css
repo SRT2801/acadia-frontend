@@ -1,3 +1,226 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
+
+@font-face {
+  font-family: 'Switzer';
+  src: url('./assets/fonts/SwitzerVariable-Regular.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@theme {
+  --color-on-primary-fixed: #001e2b;
+  --color-inverse-on-surface: #313030;
+  --color-on-tertiary: #4a2800;
+  --color-secondary-fixed: #9ff79f;
+  --color-surface-bright: #393939;
+  --color-primary: #9adbff;
+  --color-on-primary: #003548;
+  --color-surface: #131313;
+  --color-inverse-primary: #006688;
+  --color-surface-container-high: #2a2a2a;
+  --color-tertiary-fixed-dim: #ffb86f;
+  --color-surface-variant: #353535;
+  --color-surface-container-lowest: #0e0e0e;
+  --color-on-primary-container: #004e69;
+  --color-on-tertiary-container: #6b3d00;
+  --color-secondary-container: #00631e;
+  --color-on-secondary-container: #87dd88;
+  --color-on-tertiary-fixed-variant: #693c00;
+  --color-primary-fixed: #c2e8ff;
+  --color-surface-tint: #75d1ff;
+  --color-secondary-fixed-dim: #83da85;
+  --color-secondary: #83da85;
+  --color-on-secondary-fixed: #002105;
+  --color-surface-dim: #131313;
+  --color-tertiary-container: #faa443;
+  --color-background: #131313;
+  --color-error: #ffb4ab;
+  --color-on-secondary-fixed-variant: #005318;
+  --color-on-surface: #e5e2e1;
+  --color-outline: #889299;
+  --color-on-primary-fixed-variant: #004d67;
+  --color-surface-container-highest: #353535;
+  --color-on-error-container: #ffdad6;
+  --color-tertiary-fixed: #ffdcbd;
+  --color-on-surface-variant: #bdc8d0;
+  --color-primary-fixed-dim: #75d1ff;
+  --color-on-background: #e5e2e1;
+  --color-on-tertiary-fixed: #2c1600;
+  --color-on-secondary: #00390e;
+  --color-outline-variant: #3e484f;
+  --color-inverse-surface: #e5e2e1;
+  --color-primary-container: #4fc3f7;
+  --color-on-error: #690005;
+  --color-tertiary: #ffc893;
+  --color-surface-container-low: #1c1b1b;
+  --color-error-container: #93000a;
+  --color-surface-container: #20201f;
+
+  --border-radius-DEFAULT: 0.125rem;
+  --border-radius-lg: 0.25rem;
+  --border-radius-xl: 0.5rem;
+  --border-radius-full: 0.75rem;
+
+  --spacing-sidebar-width: 240px;
+  --spacing-gutter: 16px;
+  --spacing-sm: 8px;
+  --spacing-xl: 32px;
+  --spacing-lg: 24px;
+  --spacing-xs: 4px;
+  --spacing-md: 16px;
+  --spacing-base: 4px;
+
+  --font-body-sm: 'Switzer', sans-serif;
+  --font-mono-code: 'JetBrains Mono', monospace;
+  --font-body-base: 'Switzer', sans-serif;
+  --font-headline-md: 'Switzer', sans-serif;
+  --font-display-lg-mobile: 'Switzer', sans-serif;
+  --font-display-lg: 'Switzer', sans-serif;
+  --font-label-caps: 'Switzer', sans-serif;
+}
+
+@layer base {
+  body {
+    background-color: #0f0f0f;
+    color: var(--color-on-surface);
+    font-family: var(--font-body-base);
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+  }
+}
+
+@layer utilities {
+  .linear-gradient-bg {
+    background: radial-gradient(
+      circle at 50% -20%,
+      rgba(79, 195, 247, 0.1) 0%,
+      rgba(15, 15, 15, 0) 50%
+    );
+  }
+  .card-border {
+    border: 1px solid #2a2a2a;
+  }
+  .spinner {
+    border: 2px solid rgba(79, 195, 247, 0.1);
+    border-left-color: #4fc3f7;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  .input-glow:focus {
+    box-shadow: 0 0 0 1px #4fc3f7;
+    border-color: #4fc3f7;
+  }
+  .fade-in {
+    animation: fadeIn 0.4s ease-out forwards;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .la-ball-scale-multiple,
+  .la-ball-scale-multiple > div {
+    position: relative;
+    box-sizing: border-box;
+  }
+  .la-ball-scale-multiple {
+    display: block;
+    font-size: 0;
+    color: #fff;
+  }
+  .la-ball-scale-multiple.la-dark { color: #333; }
+  .la-ball-scale-multiple > div {
+    display: inline-block;
+    float: none;
+    background-color: currentColor;
+    border: 0 solid currentColor;
+  }
+  .la-ball-scale-multiple {
+    width: 32px;
+    height: 32px;
+  }
+  .la-ball-scale-multiple > div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 100%;
+    opacity: 0;
+    animation: ball-scale-multiple 1s 0s linear infinite;
+  }
+  .la-ball-scale-multiple > div:nth-child(2) { animation-delay: 0.2s; }
+  .la-ball-scale-multiple > div:nth-child(3) { animation-delay: 0.4s; }
+  .la-ball-scale-multiple.la-sm { width: 16px; height: 16px; }
+  .la-ball-scale-multiple.la-sm > div { width: 16px; height: 16px; }
+  .la-ball-scale-multiple.la-2x { width: 64px; height: 64px; }
+  .la-ball-scale-multiple.la-2x > div { width: 64px; height: 64px; }
+  .la-ball-scale-multiple.la-3x { width: 96px; height: 96px; }
+  .la-ball-scale-multiple.la-3x > div { width: 96px; height: 96px; }
+  @keyframes ball-scale-multiple {
+    0% { opacity: 0; transform: scale(0); }
+    5% { opacity: 0.75; }
+    100% { opacity: 0; transform: scale(1); }
+  }
+
+  .material-symbols-outlined {
+    font-variation-settings:
+      'FILL' 0,
+      'wght' 400,
+      'GRAD' 0,
+      'opsz' 24;
+  }
+
+  /* Text Sizes & Weights exactly as configured */
+  .text-body-sm {
+    font-size: 13px;
+    line-height: 1.5;
+    font-weight: 400;
+    letter-spacing: 0em;
+  }
+  .text-mono-code {
+    font-size: 13px;
+    line-height: 1.6;
+    font-weight: 400;
+  }
+  .text-body-base {
+    font-size: 14px;
+    line-height: 1.5;
+    font-weight: 400;
+    letter-spacing: 0em;
+  }
+  .text-headline-md {
+    font-size: 20px;
+    line-height: 1.4;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .text-display-lg-mobile {
+    font-size: 28px;
+    line-height: 1.2;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .text-display-lg {
+    font-size: 32px;
+    line-height: 1.2;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .text-label-caps {
+    font-size: 11px;
+    line-height: 1.2;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+}
