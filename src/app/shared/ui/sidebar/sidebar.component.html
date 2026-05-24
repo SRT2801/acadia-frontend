@@ -1,0 +1,79 @@
+<aside
+  [class.-translate-x-full]="!isOpen()"
+  class="fixed lg:static inset-y-0 left-0 z-50 w-sidebar-width h-dvh flex flex-col bg-surface-container-lowest border-r border-outline-variant shrink-0 transition-transform duration-200 ease-in-out lg:translate-x-0">
+
+  <div class="h-14 shrink-0 flex items-center gap-3 px-md border-b border-outline-variant">
+    <button type="button" (click)="isOpen.set(false)"
+      class="lg:hidden w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
+      <span class="material-symbols-outlined text-[20px]">close</span>
+    </button>
+    <div class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-container-high border border-surface-container-highest">
+      <span class="material-symbols-outlined text-[18px] text-primary">school</span>
+    </div>
+    <div class="flex flex-col">
+      <span class="text-body-base text-on-surface font-semibold">Acadia</span>
+      <span class="text-label-caps text-on-surface-variant">Academic Workspace</span>
+    </div>
+  </div>
+
+  <nav class="flex-1 flex flex-col py-sm overflow-y-auto">
+    <div class="px-sm flex flex-col gap-0.5">
+      <span class="px-sm py-xs text-label-caps text-on-surface-variant">Navigation</span>
+
+      <a routerLink="/app/feed" routerLinkActive="!bg-primary-container/10 !text-primary" [routerLinkActiveOptions]="{ exact: true }"
+        (click)="isOpen.set(false)"
+        class="flex items-center gap-3 px-sm py-2 rounded-lg text-body-base text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
+        <span class="material-symbols-outlined text-[20px]">home</span>
+        <span>Home</span>
+      </a>
+
+      <a routerLink="/app/my-courses" routerLinkActive="!bg-primary-container/10 !text-primary" (click)="isOpen.set(false)"
+        class="flex items-center gap-3 px-sm py-2 rounded-lg text-body-base text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
+        <span class="material-symbols-outlined text-[20px]">school</span>
+        <span>My Courses</span>
+      </a>
+
+      <a routerLink="/app/announcements" routerLinkActive="!bg-primary-container/10 !text-primary" (click)="isOpen.set(false)"
+        class="flex items-center gap-3 px-sm py-2 rounded-lg text-body-base text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
+        <span class="material-symbols-outlined text-[20px]">campaign</span>
+        <span>Announcements</span>
+      </a>
+
+      <a routerLink="/app/messages" routerLinkActive="!bg-primary-container/10 !text-primary" (click)="isOpen.set(false)"
+        class="flex items-center gap-3 px-sm py-2 rounded-lg text-body-base text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
+        <span class="material-symbols-outlined text-[20px]">mail</span>
+        <span>Messages</span>
+      </a>
+
+      <a routerLink="/app/library" routerLinkActive="!bg-primary-container/10 !text-primary" (click)="isOpen.set(false)"
+        class="flex items-center gap-3 px-sm py-2 rounded-lg text-body-base text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
+        <span class="material-symbols-outlined text-[20px]">description</span>
+        <span>Library</span>
+      </a>
+
+      <a routerLink="/app/profile" routerLinkActive="!bg-primary-container/10 !text-primary" (click)="isOpen.set(false)"
+        class="flex items-center gap-3 px-sm py-2 rounded-lg text-body-base text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
+        <span class="material-symbols-outlined text-[20px]">person</span>
+        <span>Profile</span>
+      </a>
+    </div>
+  </nav>
+
+  <div class="border-t border-outline-variant px-sm py-md flex flex-col gap-2">
+    <div class="flex items-center gap-3 px-sm">
+      <div
+        class="w-8 h-8 rounded-full bg-primary-container/20 border border-primary flex items-center justify-center text-body-sm text-on-surface font-medium">
+        JD
+      </div>
+      <div class="flex flex-col min-w-0">
+        <span class="text-body-sm text-on-surface truncate">John Doe</span>
+        <span class="text-body-sm text-on-surface-variant truncate">@johndoe</span>
+      </div>
+    </div>
+    <button type="button" (click)="logout()"
+      class="flex items-center gap-3 px-sm py-2 rounded-lg text-body-base text-on-surface-variant hover:bg-surface-container-high hover:text-error transition-colors w-full text-left">
+      <span class="material-symbols-outlined text-[20px]">logout</span>
+      <span>Logout</span>
+    </button>
+  </div>
+</aside>
