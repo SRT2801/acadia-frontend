@@ -1,13 +1,15 @@
 import { Component, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { LogoComponent } from '../shared/ui/logo/logo.component';
 import { InputDirective } from '../shared/ui/input/input.directive';
 import { ButtonComponent } from '../shared/ui/button/button.component';
 import { CardComponent } from '../shared/ui/card/card.component';
 import { CardHeaderComponent } from '../shared/ui/card-header/card-header.component';
 import { CardContentComponent } from '../shared/ui/card-content/card-content.component';
+import { AuthService } from '../shared/services/auth.service';
+import { AlertService } from '../shared/services/alert.service';
 
 @Component({
   selector: 'app-login',
@@ -28,6 +30,9 @@ import { CardContentComponent } from '../shared/ui/card-content/card-content.com
 })
 export class LoginComponent {
   private fb = inject(FormBuilder);
+  private auth = inject(AuthService);
+  private router = inject(Router);
+  private alert = inject(AlertService);
 
   loginForm = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
@@ -36,7 +41,6 @@ export class LoginComponent {
 
   showPassword = signal(false);
   isSubmitting = signal(false);
-  loginError = signal(true);
 
   togglePassword() {
     this.showPassword.update((val) => !val);
@@ -48,14 +52,24 @@ export class LoginComponent {
   }
 
   onSubmit() {
-    if (this.loginForm.valid) {
-      this.isSubmitting.set(true);
-      setTimeout(() => {
-        this.isSubmitting.set(false);
-        this.loginError.set(false);
-      }, 1000);
-    } else {
+    if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
+      return;
     }
+
+    this.isSubmitting.set(true);
+
+    const { email, password } = this.loginForm.getRawValue();
+
+    this.auth.login({ email, password }).subscribe({
+      next: () => {
+        this.router.navigate(['/app/feed']);
+      },
+      error: (err) => {
+        this.isSubmitting.set(false);
+        const message = err.error?.message || 'Invalid credentials. Please check your email and password.';
+        this.alert.error(message);
+      },
+    });
   }
 }
