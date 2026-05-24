@@ -1,0 +1,188 @@
+<div class="flex">
+  <div class="flex-1 min-w-0 max-w-176 mx-auto px-lg py-lg flex flex-col gap-lg">
+    <div class="flex items-center gap-2">
+      <div class="w-10 h-10 rounded-full bg-primary-container/20 border border-primary flex items-center justify-center text-body-sm text-on-surface font-medium shrink-0">
+        MC
+      </div>
+      <span class="text-body-sm text-on-surface-variant">Marcus Chen</span>
+      <span class="text-body-sm text-on-surface-variant/50">@mchen_phd</span>
+    </div>
+
+    <div>
+      <div class="flex items-center gap-2 mb-lg">
+        <span class="text-headline-md text-on-surface">Academic Feed</span>
+      </div>
+
+      <div class="flex items-center gap-1 border-b border-outline-variant pb-0.5 mb-lg overflow-x-auto">
+        <button class="px-3 py-1.5 rounded-lg text-body-sm text-on-surface bg-primary-container/20 transition-colors shrink-0">For you</button>
+        <button class="px-3 py-1.5 rounded-lg text-body-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors shrink-0">Following</button>
+        <button class="px-3 py-1.5 rounded-lg text-body-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors shrink-0">Research</button>
+        <button class="px-3 py-1.5 rounded-lg text-body-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors shrink-0">All Posts</button>
+      </div>
+    </div>
+
+    <div class="rounded-xl border border-outline-variant bg-surface-container-low p-md mb-lg">
+      <div class="flex gap-3">
+        <div class="w-10 h-10 rounded-full bg-primary-container/20 border border-primary flex items-center justify-center text-body-sm text-on-surface font-medium shrink-0">
+          MC
+        </div>
+        <div class="flex-1 flex flex-col gap-3">
+          <input type="text" placeholder="What's on your mind?"
+            class="w-full bg-transparent border-0 text-body-base text-on-surface placeholder-on-surface-variant focus:outline-none" />
+          <div class="flex items-center justify-between pt-3 border-t border-outline-variant">
+            <div class="flex items-center gap-1">
+              <button class="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
+                <span class="material-symbols-outlined text-[18px]">image</span>
+              </button>
+              <button class="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
+                <span class="material-symbols-outlined text-[18px]">attach_file</span>
+              </button>
+              <button class="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
+                <span class="material-symbols-outlined text-[18px]">poll</span>
+              </button>
+              <button class="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
+                <span class="material-symbols-outlined text-[18px]">sentiment_satisfied</span>
+              </button>
+            </div>
+            <button class="h-8 px-4 rounded-lg bg-primary-container text-on-primary-container text-body-sm font-medium hover:bg-primary/80 transition-colors border border-transparent">
+              Post
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    @for (post of posts; track post.id) {
+      <div class="rounded-xl border border-outline-variant bg-surface-container-low p-md fade-in">
+        <div class="flex items-start justify-between mb-3">
+          <div class="flex items-center gap-3">
+            <div
+              class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-body-sm text-on-surface font-medium shrink-0">
+              {{ post.author.charAt(0) }}
+            </div>
+            <div class="flex flex-col">
+              <div class="flex items-center gap-1.5">
+                <span class="text-body-sm text-on-surface font-medium">{{ post.courseCode }}</span>
+                <span class="text-body-sm text-on-surface-variant">·</span>
+                <span class="text-body-sm text-on-surface">{{ post.author }}</span>
+                @if (post.isVerified) {
+                  <span class="material-symbols-outlined text-[14px] text-primary">verified</span>
+                }
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span class="text-body-sm text-on-surface-variant">{{ post.handle }}</span>
+                <span class="text-body-sm text-on-surface-variant">·</span>
+                <span class="text-body-sm text-on-surface-variant">{{ post.timeAgo }}</span>
+              </div>
+            </div>
+          </div>
+          <button class="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
+            <span class="material-symbols-outlined text-[18px]">more_horiz</span>
+          </button>
+        </div>
+
+        <p class="text-body-base text-on-surface mb-3 leading-relaxed">{{ post.content }}</p>
+
+        @if (post.attachments.length > 0) {
+          <div class="flex items-center gap-3 rounded-lg border border-outline-variant bg-surface-container-high p-3 mb-3">
+            <span class="material-symbols-outlined text-[20px] text-on-surface-variant">description</span>
+            <div class="flex-1 min-w-0">
+              <p class="text-body-sm text-on-surface truncate">{{ post.attachments[0].name }}</p>
+              <p class="text-body-sm text-on-surface-variant">{{ post.attachments[0].size }} • PDF Document</p>
+            </div>
+            <button class="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
+              <span class="material-symbols-outlined text-[18px]">download</span>
+            </button>
+          </div>
+        }
+
+        <div class="flex items-center gap-1 pt-3 border-t border-outline-variant">
+          <button class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
+            <span class="material-symbols-outlined text-[16px]">chat_bubble</span>
+            <span>{{ post.comments }}</span>
+          </button>
+          <button class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
+            <span class="material-symbols-outlined text-[16px]">rebase_edit</span>
+            <span>{{ post.edits }}</span>
+          </button>
+          <button class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
+            <span class="material-symbols-outlined text-[16px]">favorite</span>
+            <span>{{ post.likes }}</span>
+          </button>
+          <button class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
+            <span class="material-symbols-outlined text-[16px]">bar_chart</span>
+            <span>{{ post.views }}</span>
+          </button>
+          <div class="flex-1"></div>
+          <button class="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
+            <span class="material-symbols-outlined text-[18px]">bookmark</span>
+          </button>
+          <button class="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
+            <span class="material-symbols-outlined text-[18px]">share</span>
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+
+  <aside class="hidden lg:flex w-80 shrink-0 border-l border-outline-variant bg-surface-container-lowest px-md py-lg flex-col gap-lg self-start sticky top-0">
+    <div>
+      <h3 class="text-body-sm text-on-surface font-semibold mb-3 flex items-center gap-2">
+        <span class="material-symbols-outlined text-[18px]">school</span>
+        Active Courses
+      </h3>
+      <div class="flex flex-col gap-2">
+        @for (course of courses; track course.code) {
+          <div class="rounded-lg border border-outline-variant p-3 hover:bg-surface-container-high transition-colors cursor-pointer">
+            <p class="text-body-sm text-on-surface font-medium">{{ course.code }}</p>
+            <p class="text-body-sm text-on-surface-variant">{{ course.name }}</p>
+            <span class="text-label-caps text-primary mt-1 block">{{ course.status }}</span>
+          </div>
+        }
+      </div>
+      <button class="mt-2 text-body-sm text-primary hover:text-primary-fixed-dim transition-colors">View all courses</button>
+    </div>
+
+    <div>
+      <h3 class="text-body-sm text-on-surface font-semibold mb-3 flex items-center gap-2">
+        <span class="material-symbols-outlined text-[18px]">mail</span>
+        Recent Messages
+      </h3>
+      <div class="flex flex-col gap-1">
+        @for (msg of messages; track $index) {
+          <div class="flex items-start gap-3 rounded-lg p-2 hover:bg-surface-container-high transition-colors cursor-pointer">
+            <div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-label-caps text-on-surface shrink-0">
+              {{ msg.author.charAt(0) }}{{ msg.author.split(' ').pop()?.charAt(0) }}
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between">
+                <span class="text-body-sm text-on-surface truncate">{{ msg.author }}</span>
+                <span class="text-label-caps text-on-surface-variant shrink-0">{{ msg.time }}</span>
+              </div>
+              <p class="text-body-sm text-on-surface-variant truncate">{{ msg.preview }}</p>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div>
+      <h3 class="text-body-sm text-on-surface font-semibold mb-3 flex items-center gap-2">
+        <span class="material-symbols-outlined text-[18px]">calendar_month</span>
+        University Calendar
+      </h3>
+      <div class="flex flex-col gap-2">
+        @for (event of calendar; track $index) {
+          <div class="rounded-lg border border-outline-variant p-3 hover:bg-surface-container-high transition-colors cursor-pointer">
+            <span class="text-label-caps text-primary">{{ event.date }}</span>
+            <p class="text-body-sm text-on-surface">{{ event.title }}</p>
+            <p class="text-body-sm text-on-surface-variant">{{ event.subtitle }}</p>
+          </div>
+        }
+      </div>
+      <button class="mt-2 text-body-sm text-primary hover:text-primary-fixed-dim transition-colors">View Full Calendar</button>
+    </div>
+
+  
+  </aside>
+</div>
