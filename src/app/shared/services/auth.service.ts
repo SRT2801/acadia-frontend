@@ -9,7 +9,7 @@ export interface RegisterRequest {
   username: string;
   email: string;
   password: string;
-  universityId: number;
+  universityId?: number;
   avatar?: string;
   bio?: string;
 }
@@ -21,6 +21,15 @@ export interface RegisterResponse {
 
 export interface VerifyEmailRequest {
   token: string;
+}
+
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface ResetPasswordRequest {
+  token: string;
+  newPassword: string;
 }
 
 @Injectable({
@@ -36,5 +45,13 @@ export class AuthService {
 
   verifyEmail(data: VerifyEmailRequest): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/verify-email`, data);
+  }
+
+  forgotPassword(data: ForgotPasswordRequest): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.apiUrl}/forgot-password`, data);
+  }
+
+  resetPassword(data: ResetPasswordRequest): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.apiUrl}/reset-password`, data);
   }
 }
