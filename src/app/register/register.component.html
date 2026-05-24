@@ -52,15 +52,6 @@
 
           <div class="flex gap-md">
             <div class="flex flex-col gap-xs flex-1">
-              <label for="universityId" class="text-body-sm text-on-surface">University ID</label>
-              <div class="relative">
-                <span
-                  class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[18px] text-on-surface-variant pointer-events-none">badge</span>
-                <input id="universityId" type="text" ui-input [hasError]="isFieldInvalid('universityId')"
-                  [iconLeft]="true" formControlName="universityId" autocomplete="off" placeholder="e.g. STU-2024-001" />
-              </div>
-            </div>
-            <div class="flex flex-col gap-xs flex-1">
               <label for="password" class="text-body-sm text-on-surface">Password</label>
               <div class="relative">
                 <span
@@ -88,6 +79,65 @@
                 </span>
               </div>
             </div>
+          </div>
+
+          <div class="flex flex-col gap-xs">
+            <label class="text-body-sm text-on-surface">University</label>
+
+            @if (detectedUniversity() && !selectedUniversityId()) {
+              <div
+                class="fade-in flex items-center justify-between rounded-lg bg-primary-container/10 border border-primary/30 px-3 py-2.5">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[18px] text-primary">auto_awesome</span>
+                  <div class="flex flex-col">
+                    <span class="text-body-sm text-on-surface">{{ detectedUniversity()!.name }}</span>
+                    <span class="text-body-sm text-on-surface-variant">Detected from your email domain</span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-1">
+                  <button type="button" (click)="selectedUniversityId.set(detectedUniversity()!.id)"
+                    class="text-body-sm text-primary hover:text-primary-fixed-dim transition-colors font-medium">
+                    Confirm
+                  </button>
+                  <span class="text-on-surface-variant mx-1">·</span>
+                  <button type="button" (click)="showUniversityPicker.set(true)"
+                    class="text-body-sm text-on-surface-variant hover:text-on-surface transition-colors">
+                    Change
+                  </button>
+                </div>
+              </div>
+            }
+
+            @if (selectedUniversityId()) {
+              <div
+                class="flex items-center justify-between rounded-lg bg-surface-container-high border border-outline-variant px-3 py-2.5">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[18px] text-secondary">check_circle</span>
+                  <span class="text-body-sm text-on-surface">
+                    {{ universities().find(u => u.id === selectedUniversityId())?.name }}
+                  </span>
+                </div>
+                <button type="button" (click)="removeUniversity()"
+                  class="text-body-sm text-on-surface-variant hover:text-on-surface transition-colors">
+                  Change
+                </button>
+              </div>
+            }
+
+            @if ((!detectedUniversity() && !selectedUniversityId()) || showUniversityPicker()) {
+              <div class="fade-in">
+                <app-autocomplete
+                  [options]="universityOptions()"
+                  placeholder="Search for your university..."
+                  (valueChange)="onUniversityChange($event)" />
+                @if (universityError()) {
+                  <span class="text-body-sm text-error mt-0.5 block">{{ universityError() }}</span>
+                }
+                <span class="text-body-sm text-on-surface-variant mt-1 block">
+                  Select your university or leave empty to auto-detect from your email.
+                </span>
+              </div>
+            }
           </div>
 
           <button type="submit" ui-button [disabled]="registerForm.invalid || isSubmitting()" class="mt-sm">
