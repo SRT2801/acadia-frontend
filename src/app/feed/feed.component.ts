@@ -7,7 +7,6 @@ import { MOCK_POSTS, MOCK_COURSES, MOCK_MESSAGES, MOCK_NETWORK, MOCK_CALENDAR } 
   standalone: true,
   imports: [CommonModule],
   templateUrl: './feed.component.html',
-  styleUrl: './feed.component.css',
 })
 export class FeedComponent {
   posts = MOCK_POSTS;

@@ -29,7 +29,6 @@ export type ForgotPasswordState = 'form' | 'success';
     LogoComponent,
   ],
   templateUrl: './forgot-password.component.html',
-  styleUrl: './forgot-password.component.css',
 })
 export class ForgotPasswordComponent {
   private fb = inject(FormBuilder);

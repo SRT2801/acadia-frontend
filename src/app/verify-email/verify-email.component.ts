@@ -25,7 +25,6 @@ export type VerificationState = 'no-token' | 'loading' | 'success' | 'error';
     CardContentComponent,
   ],
   templateUrl: './verify-email.component.html',
-  styleUrl: './verify-email.component.css',
 })
 export class VerifyEmailComponent {
   private authService = inject(AuthService);

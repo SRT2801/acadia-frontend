@@ -10,7 +10,6 @@ export interface AutocompleteOption {
   selector: 'app-autocomplete',
   standalone: true,
   templateUrl: './autocomplete.component.html',
-  styleUrl: './autocomplete.component.css',
 })
 export class AutocompleteComponent {
   options = input<AutocompleteOption[]>([]);

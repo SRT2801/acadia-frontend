@@ -9,7 +9,6 @@ import { RefreshStateService } from '../../services/refresh-state.service';
   standalone: true,
   imports: [CommonModule, RouterLink, RouterLinkActive],
   templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.css',
 })
 export class SidebarComponent {
   private auth = inject(AuthService);

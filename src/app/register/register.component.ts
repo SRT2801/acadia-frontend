@@ -30,7 +30,6 @@ import { AlertService } from '../shared/services/alert.service';
     LogoComponent,
   ],
   templateUrl: './register.component.html',
-  styleUrl: './register.component.css',
 })
 export class RegisterComponent {
   private fb = inject(FormBuilder);

@@ -7,8 +7,7 @@ import { filter } from 'rxjs';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, CardFooterComponent, NgxSpinnerComponent],
-  templateUrl: './app.html',
-  styleUrl: './app.css'
+  templateUrl: './app.html'
 })
 export class App {
   private router = inject(Router);
