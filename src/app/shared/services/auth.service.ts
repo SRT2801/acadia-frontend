@@ -3,6 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
 export interface RegisterRequest {
   firstName: string;
   lastName: string;
@@ -12,11 +17,6 @@ export interface RegisterRequest {
   universityId?: number;
   avatar?: string;
   bio?: string;
-}
-
-export interface RegisterResponse {
-  id: string;
-  token: string;
 }
 
 export interface VerifyEmailRequest {
@@ -32,6 +32,37 @@ export interface ResetPasswordRequest {
   newPassword: string;
 }
 
+export interface UserResponse {
+  id: number;
+  email: string;
+  username: string;
+  firstName: string;
+  lastName: string;
+  avatar?: string;
+  bio?: string;
+  status: string;
+  emailVerifiedAt?: string;
+  roleId: number;
+  universityId: number;
+  createdAt: string;
+  updatedAt: string;
+  permissions: string[];
+}
+
+export interface AuthResponse {
+  user: UserResponse;
+}
+
+export interface JwtPayloadResponse {
+  userId: number;
+  email: string;
+  roleId: number;
+  universityId: number;
+  sessionId: number;
+  roleName: string;
+  permissions: string[];
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -39,12 +70,20 @@ export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = `${environment.apiUrl}/auth`;
 
-  register(data: RegisterRequest): Observable<RegisterResponse> {
-    return this.http.post<RegisterResponse>(`${this.apiUrl}/register`, data);
+  login(data: LoginRequest): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, data);
   }
 
-  verifyEmail(data: VerifyEmailRequest): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/verify-email`, data);
+  logout(): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.apiUrl}/logout`, {});
+  }
+
+  register(data: RegisterRequest): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/register`, data);
+  }
+
+  verifyEmail(data: VerifyEmailRequest): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.apiUrl}/verify-email`, data);
   }
 
   forgotPassword(data: ForgotPasswordRequest): Observable<{ message: string }> {
@@ -53,5 +92,13 @@ export class AuthService {
 
   resetPassword(data: ResetPasswordRequest): Observable<{ message: string }> {
     return this.http.post<{ message: string }>(`${this.apiUrl}/reset-password`, data);
+  }
+
+  refresh(): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/refresh`, {});
+  }
+
+  me(): Observable<JwtPayloadResponse> {
+    return this.http.get<JwtPayloadResponse>(`${this.apiUrl}/me`);
   }
 }
