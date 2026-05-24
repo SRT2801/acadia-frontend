@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, signal, inject } from '@angular/core';
+import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { NgxSpinnerComponent } from 'ngx-spinner';
 import { CardFooterComponent } from './shared/ui/card-footer/card-footer.component';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -9,4 +10,16 @@ import { CardFooterComponent } from './shared/ui/card-footer/card-footer.compone
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App {}
+export class App {
+  private router = inject(Router);
+
+  showFooter = signal(true);
+
+  constructor() {
+    this.router.events
+      .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
+      .subscribe((event) => {
+        this.showFooter.set(!event.urlAfterRedirects.startsWith('/app'));
+      });
+  }
+}
