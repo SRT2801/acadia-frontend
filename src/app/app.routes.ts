@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './shared/guards/auth.guard';
+import { createCourseGuard } from './shared/guards/create-course.guard';
 
 export const routes: Routes = [
   {
@@ -30,6 +31,15 @@ export const routes: Routes = [
       {
         path: 'feed',
         loadComponent: () => import('./feed/feed.component').then((m) => m.FeedComponent),
+      },
+      {
+        path: 'courses',
+        loadComponent: () => import('./courses/course-list/course-list.component').then((m) => m.CourseListComponent),
+      },
+      {
+        path: 'courses/new',
+        canActivate: [createCourseGuard],
+        loadComponent: () => import('./courses/course-form/course-form.component').then((m) => m.CourseFormComponent),
       },
       {
         path: 'my-courses',
