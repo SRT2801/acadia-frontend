@@ -20,42 +20,17 @@
     <div class="px-sm flex flex-col gap-0.5">
       <span class="px-sm py-xs text-label-caps text-on-surface-variant">Navigation</span>
 
-      <a routerLink="/app/feed" routerLinkActive="!bg-primary-container/10 !text-primary" [routerLinkActiveOptions]="{ exact: true }"
-        (click)="isOpen.set(false)"
-        class="flex items-center gap-3 px-sm py-2 rounded-lg text-body-base text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
-        <span class="material-symbols-outlined text-[20px]">home</span>
-        <span>Home</span>
-      </a>
-
-      <a routerLink="/app/my-courses" routerLinkActive="!bg-primary-container/10 !text-primary" (click)="isOpen.set(false)"
-        class="flex items-center gap-3 px-sm py-2 rounded-lg text-body-base text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
-        <span class="material-symbols-outlined text-[20px]">school</span>
-        <span>My Courses</span>
-      </a>
-
-      <a routerLink="/app/announcements" routerLinkActive="!bg-primary-container/10 !text-primary" (click)="isOpen.set(false)"
-        class="flex items-center gap-3 px-sm py-2 rounded-lg text-body-base text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
-        <span class="material-symbols-outlined text-[20px]">campaign</span>
-        <span>Announcements</span>
-      </a>
-
-      <a routerLink="/app/messages" routerLinkActive="!bg-primary-container/10 !text-primary" (click)="isOpen.set(false)"
-        class="flex items-center gap-3 px-sm py-2 rounded-lg text-body-base text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
-        <span class="material-symbols-outlined text-[20px]">mail</span>
-        <span>Messages</span>
-      </a>
-
-      <a routerLink="/app/library" routerLinkActive="!bg-primary-container/10 !text-primary" (click)="isOpen.set(false)"
-        class="flex items-center gap-3 px-sm py-2 rounded-lg text-body-base text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
-        <span class="material-symbols-outlined text-[20px]">description</span>
-        <span>Library</span>
-      </a>
-
-      <a routerLink="/app/profile" routerLinkActive="!bg-primary-container/10 !text-primary" (click)="isOpen.set(false)"
-        class="flex items-center gap-3 px-sm py-2 rounded-lg text-body-base text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
-        <span class="material-symbols-outlined text-[20px]">person</span>
-        <span>Profile</span>
-      </a>
+      @for (item of navItems(); track item.route) {
+        <a
+          [routerLink]="item.route"
+          routerLinkActive="!bg-primary-container/10 !text-primary"
+          [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
+          (click)="isOpen.set(false)"
+          class="flex items-center gap-3 px-sm py-2 rounded-lg text-body-base text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
+          <span class="material-symbols-outlined text-[20px]">{{ item.icon }}</span>
+          <span>{{ item.label }}</span>
+        </a>
+      }
     </div>
   </nav>
 
@@ -63,11 +38,11 @@
     <div class="flex items-center gap-3 px-sm">
       <div
         class="w-8 h-8 rounded-full bg-primary-container/20 border border-primary flex items-center justify-center text-body-sm text-on-surface font-medium">
-        JD
+        {{ initials() }}
       </div>
       <div class="flex flex-col min-w-0">
-        <span class="text-body-sm text-on-surface truncate">John Doe</span>
-        <span class="text-body-sm text-on-surface-variant truncate">@johndoe</span>
+        <span class="text-body-sm text-on-surface truncate">{{ displayName() }}</span>
+        <span class="text-body-sm text-on-surface-variant truncate">{{ displayUsername() }}</span>
       </div>
     </div>
     <button type="button" (click)="logout()"

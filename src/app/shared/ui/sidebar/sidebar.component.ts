@@ -1,8 +1,15 @@
-import { Component, inject, model } from '@angular/core';
+import { Component, inject, input, model } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { RefreshStateService } from '../../services/refresh-state.service';
+
+export interface NavItem {
+  label: string;
+  route: string;
+  icon: string;
+  exact?: boolean;
+}
 
 @Component({
   selector: 'app-sidebar',
@@ -16,6 +23,12 @@ export class SidebarComponent {
   private refreshState = inject(RefreshStateService);
 
   isOpen = model(false);
+  navItems = input<NavItem[]>([]);
+
+  displayName = this.auth.displayName;
+  initials = this.auth.initials;
+  displayUsername = this.auth.displayUsername;
+  displayRole = this.auth.displayRole;
 
   logout() {
     this.refreshState.reset();
