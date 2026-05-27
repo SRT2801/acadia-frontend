@@ -1,0 +1,163 @@
+<header class="w-full max-w-[800px] mx-auto pt-xl px-lg">
+  <a
+    routerLink="/app/courses"
+    class="inline-flex items-center gap-xs text-on-surface-variant hover:text-primary transition-colors mb-md group">
+    <span class="material-symbols-outlined text-[18px] group-hover:-translate-x-1 transition-transform">arrow_back</span>
+    <span class="text-body-sm">Volver</span>
+  </a>
+  <h1 class="text-headline-md text-on-surface">Crear nueva materia</h1>
+</header>
+
+<section class="w-full max-w-[800px] mx-auto py-lg px-lg">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-[24px]">
+
+    <div class="flex flex-col gap-xs">
+      <label class="text-[13px] font-medium text-on-surface-variant flex items-center gap-1" for="name">
+        Nombre <span class="text-error">*</span>
+      </label>
+      <input
+        id="name"
+        type="text"
+        formControlName="name"
+        placeholder="Ej: Programación Avanzada II"
+        class="h-10 bg-[#1a1a1a] border border-[#2a2a2a] rounded-[6px] px-md text-on-surface placeholder:text-on-surface-variant/40 text-body-base focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all"
+      />
+    </div>
+
+    <div class="flex flex-col gap-xs">
+      <label class="text-[13px] font-medium text-on-surface-variant" for="code">
+        Código
+      </label>
+      <input
+        id="code"
+        type="text"
+        formControlName="code"
+        placeholder="Se genera automáticamente si no lo pones"
+        class="h-10 bg-[#1a1a1a] border border-[#2a2a2a] rounded-[6px] px-md text-on-surface placeholder:text-on-surface-variant/40 text-body-base focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all"
+      />
+    </div>
+
+    <div class="flex flex-col gap-xs">
+      <label class="text-[13px] font-medium text-on-surface-variant" for="description">
+        Descripción
+      </label>
+      <textarea
+        id="description"
+        formControlName="description"
+        rows="3"
+        placeholder="Breve descripción de los objetivos del curso..."
+        class="bg-[#1a1a1a] border border-[#2a2a2a] rounded-[6px] px-md py-sm text-on-surface placeholder:text-on-surface-variant/40 text-body-base focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all resize-none"
+      ></textarea>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-[24px]">
+      <div class="flex flex-col gap-xs">
+        <label class="text-[13px] font-medium text-on-surface-variant" for="semester">
+          Semestre
+        </label>
+        <input
+          id="semester"
+          type="text"
+          formControlName="semester"
+          placeholder="2026-1"
+          class="h-10 bg-[#1a1a1a] border border-[#2a2a2a] rounded-[6px] px-md text-on-surface placeholder:text-on-surface-variant/40 text-body-base focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all"
+        />
+      </div>
+
+      <div class="flex flex-col gap-xs">
+        <label class="text-[13px] font-medium text-on-surface-variant flex items-center gap-1" for="university">
+          Universidad <span class="text-error">*</span>
+        </label>
+        <div class="relative">
+          <select
+            id="university"
+            formControlName="universityId"
+            class="w-full h-10 bg-[#1a1a1a] border border-[#2a2a2a] rounded-[6px] px-md text-on-surface text-body-base focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all appearance-none cursor-pointer"
+          >
+            <option value="" disabled>Seleccionar institución</option>
+            @for (u of universities(); track u.id) {
+              <option [value]="u.id">{{ u.name }}</option>
+            }
+          </select>
+          <span class="material-symbols-outlined absolute right-md top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-[20px]">
+            keyboard_arrow_down
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-end gap-md pt-lg">
+      <a
+        routerLink="/app/courses"
+        class="inline-flex items-center h-10 px-lg text-on-surface-variant hover:text-on-surface font-semibold text-body-sm transition-colors active:scale-95 no-underline"
+      >
+        Cancelar
+      </a>
+      <button
+        type="submit"
+        [disabled]="!formValid() || submitting()"
+        class="inline-flex items-center h-10 px-xl bg-primary-container text-background font-bold text-body-sm rounded-[6px] hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-primary/10 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100"
+      >
+        @if (submitting()) {
+          <span class="material-symbols-outlined animate-spin mr-sm text-[18px]">progress_activity</span>
+        }
+        Crear materia
+      </button>
+    </div>
+  </form>
+</section>
+
+<div class="w-full max-w-[800px] mx-auto px-lg mt-auto pb-xl">
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-md">
+    <div class="bg-surface-container-low border border-outline-variant p-md rounded-lg flex flex-col gap-xs">
+      <span class="material-symbols-outlined text-primary text-[20px]">info</span>
+      <h4 class="font-semibold text-body-sm text-on-surface">Visibilidad</h4>
+      <p class="text-[12px] text-on-surface-variant">Las nuevas materias son privadas por defecto hasta que invites alumnos.</p>
+    </div>
+    <div class="bg-surface-container-low border border-outline-variant p-md rounded-lg flex flex-col gap-xs">
+      <span class="material-symbols-outlined text-secondary text-[20px]">sync</span>
+      <h4 class="font-semibold text-body-sm text-on-surface">Sincronización</h4>
+      <p class="text-[12px] text-on-surface-variant">Puedes importar contenido de semestres anteriores automáticamente.</p>
+    </div>
+    <div class="bg-surface-container-low border border-outline-variant p-md rounded-lg flex flex-col gap-xs">
+      <span class="material-symbols-outlined text-tertiary-container text-[20px]">verified_user</span>
+      <h4 class="font-semibold text-body-sm text-on-surface">Acreditación</h4>
+      <p class="text-[12px] text-on-surface-variant">El código de materia debe coincidir con el registro oficial de la facultad.</p>
+    </div>
+  </div>
+</div>
+
+<app-modal
+  [isOpen]="showSuccessModal()"
+  title="Materia creada exitosamente"
+  (close)="goToCourses()">
+  <div class="flex flex-col gap-lg items-center text-center">
+    <div class="w-12 h-12 rounded-full bg-secondary/20 flex items-center justify-center">
+      <span class="material-symbols-outlined text-secondary text-[28px]">check_circle</span>
+    </div>
+
+    <p class="text-body-base text-on-surface-variant">
+      Comparte este código con tus alumnos para que puedan unirse:
+    </p>
+
+    <div class="flex items-center gap-sm w-full max-w-xs">
+      <code class="flex-1 bg-surface-container-high border border-outline-variant rounded-lg px-lg py-sm text-headline-md text-on-surface font-mono tracking-[0.2em] text-center select-all">
+        {{ invitationCode() }}
+      </code>
+      <button
+        type="button"
+        (click)="copyCode()"
+        class="inline-flex items-center gap-xs h-10 px-md bg-primary-container text-on-primary-container font-semibold text-body-sm rounded-lg hover:brightness-110 active:scale-95 transition-all shrink-0">
+        <span class="material-symbols-outlined text-[18px]">content_copy</span>
+        {{ copyLabel() }}
+      </button>
+    </div>
+
+    <button
+      type="button"
+      (click)="goToCourses()"
+      class="inline-flex items-center h-10 px-lg bg-primary-container text-background font-bold text-body-sm rounded-[6px] hover:brightness-110 active:scale-95 transition-all w-full max-w-xs justify-center">
+      Ir a mis materias
+    </button>
+  </div>
+</app-modal>
