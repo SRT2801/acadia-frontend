@@ -127,6 +127,38 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
+  .animate-backdrop-in {
+    animation: backdropIn 0.2s ease-out forwards;
+  }
+  @keyframes backdropIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .animate-backdrop-out {
+    animation: backdropOut 0.2s ease-out forwards;
+  }
+  @keyframes backdropOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+
+  .animate-modal-in {
+    animation: modalIn 0.25s ease-out forwards;
+  }
+  @keyframes modalIn {
+    from { opacity: 0; transform: translateY(12px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .animate-modal-out {
+    animation: modalOut 0.2s ease-in forwards;
+  }
+  @keyframes modalOut {
+    from { opacity: 1; transform: translateY(0) scale(1); }
+    to { opacity: 0; transform: translateY(8px) scale(0.97); }
+  }
+
   .la-ball-scale-multiple,
   .la-ball-scale-multiple > div {
     position: relative;
