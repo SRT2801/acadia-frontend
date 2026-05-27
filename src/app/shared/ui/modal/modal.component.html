@@ -1,0 +1,33 @@
+@if (visible()) {
+  <div
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-md"
+    [class.animate-backdrop-in]="!closing()"
+    [class.animate-backdrop-out]="closing()"
+    (click)="onBackdropClick()"
+  >
+    <div
+      class="bg-surface rounded-xl border border-outline-variant w-full max-h-full flex flex-col shadow-2xl"
+      [class.animate-modal-in]="!closing()"
+      [class.animate-modal-out]="closing()"
+      [style.max-width]="panelMaxWidth()"
+      (click)="$event.stopPropagation()"
+    >
+      <div class="flex items-center justify-between p-lg shrink-0">
+        <h2 class="text-headline-md truncate pr-md">{{ title() }}</h2>
+        <button
+          type="button"
+          class="text-on-surface-variant hover:text-on-surface p-xs rounded-md hover:bg-surface-container-high transition-colors shrink-0"
+          (click)="closeWithAnimation()"
+        >
+          <span class="material-symbols-outlined text-[20px]">close</span>
+        </button>
+      </div>
+
+      <div class="border-t border-outline-variant shrink-0"></div>
+
+      <div class="p-lg overflow-y-auto min-h-0">
+        <ng-content />
+      </div>
+    </div>
+  </div>
+}
