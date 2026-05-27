@@ -1,4 +1,4 @@
-<header class="w-full max-w-[800px] mx-auto pt-xl px-lg">
+<header class="w-full max-w-200 mx-auto pt-xl px-lg">
   <a
     routerLink="/app/courses"
     class="inline-flex items-center gap-xs text-on-surface-variant hover:text-primary transition-colors mb-md group">
@@ -8,7 +8,7 @@
   <h1 class="text-headline-md text-on-surface">Crear nueva materia</h1>
 </header>
 
-<section class="w-full max-w-[800px] mx-auto py-lg px-lg">
+<section class="w-full max-w-200 mx-auto py-lg px-lg">
   <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-[24px]">
 
     <div class="flex flex-col gap-xs">
@@ -20,7 +20,7 @@
         type="text"
         formControlName="name"
         placeholder="Ej: Programación Avanzada II"
-        class="h-10 bg-[#1a1a1a] border border-[#2a2a2a] rounded-[6px] px-md text-on-surface placeholder:text-on-surface-variant/40 text-body-base focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all"
+        class="h-10 bg-[#1a1a1a] border border-surface-container-high rounded-md px-md text-on-surface placeholder:text-on-surface-variant/40 text-body-base focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all"
       />
     </div>
 
@@ -33,7 +33,7 @@
         type="text"
         formControlName="code"
         placeholder="Se genera automáticamente si no lo pones"
-        class="h-10 bg-[#1a1a1a] border border-[#2a2a2a] rounded-[6px] px-md text-on-surface placeholder:text-on-surface-variant/40 text-body-base focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all"
+        class="h-10 bg-[#1a1a1a] border border-surface-container-high rounded-md px-md text-on-surface placeholder:text-on-surface-variant/40 text-body-base focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all"
       />
     </div>
 
@@ -46,7 +46,7 @@
         formControlName="description"
         rows="3"
         placeholder="Breve descripción de los objetivos del curso..."
-        class="bg-[#1a1a1a] border border-[#2a2a2a] rounded-[6px] px-md py-sm text-on-surface placeholder:text-on-surface-variant/40 text-body-base focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all resize-none"
+        class="bg-[#1a1a1a] border border-surface-container-high rounded-md px-md py-sm text-on-surface placeholder:text-on-surface-variant/40 text-body-base focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all resize-none"
       ></textarea>
     </div>
 
@@ -60,7 +60,7 @@
           type="text"
           formControlName="semester"
           placeholder="2026-1"
-          class="h-10 bg-[#1a1a1a] border border-[#2a2a2a] rounded-[6px] px-md text-on-surface placeholder:text-on-surface-variant/40 text-body-base focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all"
+          class="h-10 bg-[#1a1a1a] border border-surface-container-high rounded-md px-md text-on-surface placeholder:text-on-surface-variant/40 text-body-base focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all"
         />
       </div>
 
@@ -72,7 +72,7 @@
           <select
             id="university"
             formControlName="universityId"
-            class="w-full h-10 bg-[#1a1a1a] border border-[#2a2a2a] rounded-[6px] px-md text-on-surface text-body-base focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all appearance-none cursor-pointer"
+            class="w-full h-10 bg-[#1a1a1a] border border-surface-container-high rounded-md px-md text-on-surface text-body-base focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all appearance-none cursor-pointer"
           >
             <option value="" disabled>Seleccionar institución</option>
             @for (u of universities(); track u.id) {
@@ -96,7 +96,7 @@
       <button
         type="submit"
         [disabled]="!formValid() || submitting()"
-        class="inline-flex items-center h-10 px-xl bg-primary-container text-background font-bold text-body-sm rounded-[6px] hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-primary/10 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100"
+        class="inline-flex items-center h-10 px-xl bg-primary-container text-background font-bold text-body-sm rounded-md hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-primary/10 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100"
       >
         @if (submitting()) {
           <span class="material-symbols-outlined animate-spin mr-sm text-[18px]">progress_activity</span>
@@ -107,7 +107,7 @@
   </form>
 </section>
 
-<div class="w-full max-w-[800px] mx-auto px-lg mt-auto pb-xl">
+<div class="w-full max-w-200 mx-auto px-lg mt-auto pb-xl">
   <div class="grid grid-cols-1 md:grid-cols-3 gap-md">
     <div class="bg-surface-container-low border border-outline-variant p-md rounded-lg flex flex-col gap-xs">
       <span class="material-symbols-outlined text-primary text-[20px]">info</span>
@@ -156,7 +156,7 @@
     <button
       type="button"
       (click)="goToCourses()"
-      class="inline-flex items-center h-10 px-lg bg-primary-container text-background font-bold text-body-sm rounded-[6px] hover:brightness-110 active:scale-95 transition-all w-full max-w-xs justify-center">
+      class="inline-flex items-center h-10 px-lg bg-primary-container text-background font-bold text-body-sm rounded-md hover:brightness-110 active:scale-95 transition-all w-full max-w-xs justify-center">
       Ir a mis materias
     </button>
   </div>
