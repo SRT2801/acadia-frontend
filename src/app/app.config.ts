@@ -2,7 +2,7 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners, APP_INITIALIZER 
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { provideSpinnerConfig } from 'ngx-spinner';
-import { catchError, of } from 'rxjs';
+import { catchError, of, tap } from 'rxjs';
 
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
@@ -18,7 +18,10 @@ export const appConfig: ApplicationConfig = {
     {
       provide: APP_INITIALIZER,
       useFactory: (auth: AuthService) => () =>
-        auth.me().pipe(catchError(() => of(null))).toPromise(),
+        auth.me().pipe(
+          tap((user) => auth.currentUser.set(user)),
+          catchError(() => of(null)),
+        ).toPromise(),
       deps: [AuthService],
       multi: true,
     },
