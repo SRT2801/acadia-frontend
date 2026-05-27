@@ -1,0 +1,98 @@
+<div class="flex-1 overflow-y-auto p-lg">
+  <header class="flex justify-between items-center mb-lg">
+    <h1 class="text-headline-md">My Courses</h1>
+    <div class="flex gap-md">
+      <button ui-button variant="ghost" (click)="openJoinModal()">
+        <span class="material-symbols-outlined mr-sm">link</span>
+        Unirme
+      </button>
+      @if (canCreate()) {
+        <a ui-button [routerLink]="['/app/courses/new']">
+          <span class="material-symbols-outlined mr-sm">add</span>
+          Nueva materia
+        </a>
+      }
+    </div>
+  </header>
+
+  @if (loading()) {
+    <div class="flex justify-center py-16">
+      <div class="spinner"></div>
+    </div>
+  }
+
+  @if (!loading() && courses().length === 0) {
+    <div class="flex flex-col items-center justify-center py-16">
+      <span class="material-symbols-outlined text-6xl text-on-surface-variant mb-lg">school</span>
+      <h3 class="text-headline-md mb-sm">Aún no tienes materias</h3>
+      <p class="text-body-base text-on-surface-variant mb-lg text-center max-w-sm">
+        @if (canCreate()) {
+          Crea tu primera materia o únete con un código de invitación.
+        } @else {
+          Pide a tu profesor el código de invitación para unirte a una materia.
+        }
+      </p>
+      <div class="flex gap-md">
+        @if (canCreate()) {
+          <a ui-button [routerLink]="['/app/courses/new']">Crear materia</a>
+        }
+        <button ui-button variant="secondary" (click)="openJoinModal()">Unirme con código</button>
+      </div>
+    </div>
+  }
+
+  @if (!loading() && courses().length > 0) {
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-md">
+      @for (course of courses(); track course.id) {
+        <button
+          class="card-border rounded-xl p-lg hover:bg-surface-container-high cursor-pointer transition-colors text-left w-full"
+          (click)="navigateToCourse(course)">
+          <div class="text-sm text-on-surface-variant mb-sm font-mono">{{ course.code }}</div>
+          <h3 class="text-headline-md mb-xs">{{ course.name }}</h3>
+          @if (course.semester) {
+            <span class="text-body-sm text-on-surface-variant block mb-sm">{{ course.semester }}</span>
+          }
+          <div class="flex gap-sm flex-wrap">
+            @if (course.university) {
+              <span class="text-body-sm px-sm py-0.5 rounded bg-surface-container-high text-on-surface-variant">
+                {{ course.university.name }}
+              </span>
+            }
+          </div>
+        </button>
+      }
+    </div>
+  }
+</div>
+
+<app-modal
+  [isOpen]="showJoinModal()"
+  title="Unirse a una materia"
+  (close)="closeJoinModal()">
+  <div class="flex flex-col gap-md">
+    <div class="flex flex-col gap-sm">
+      <label class="text-body-sm text-on-surface-variant">Código de invitación</label>
+      <input
+        ui-input
+        type="text"
+        [(ngModel)]="joinCode"
+        placeholder="ABC123XYZ"
+        class="uppercase tracking-wider" />
+    </div>
+    @if (joinError()) {
+      <p class="text-body-sm text-error">{{ joinError() }}</p>
+    }
+    <div class="flex gap-md justify-end pt-md">
+      <button ui-button variant="ghost" (click)="closeJoinModal()">Cancelar</button>
+      <button
+        ui-button
+        [disabled]="!joinCode() || joining()"
+        (click)="joinCourse()">
+        @if (joining()) {
+          <span class="material-symbols-outlined animate-spin mr-sm">progress_activity</span>
+        }
+        Unirme
+      </button>
+    </div>
+  </div>
+</app-modal>
