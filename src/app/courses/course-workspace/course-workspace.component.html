@@ -1,0 +1,82 @@
+<div class="flex h-full">
+  <div class="w-[72px] bg-surface-container-lowest flex flex-col items-center py-md gap-sm
+              border-r border-outline-variant shrink-0 overflow-y-auto">
+    <a routerLink="/app/courses"
+       class="w-12 h-12 rounded-xl flex items-center justify-center
+              text-on-surface-variant hover:bg-surface-container-high
+              hover:text-on-surface transition-colors"
+       title="Volver a materias">
+      <span class="material-symbols-outlined">arrow_back</span>
+    </a>
+    <div class="border-t border-outline-variant w-8"></div>
+    @for (c of userCourses(); track c.id) {
+      <a [routerLink]="['/app/courses', c.id]"
+         class="w-12 h-12 rounded-xl flex items-center justify-center text-sm font-semibold
+                transition-colors"
+         [class.bg-primary-container]="c.id === courseId()"
+         [class.text-on-primary-container]="c.id === courseId()"
+         [class.bg-surface-container-high]="c.id !== courseId()"
+         [class.text-on-surface-variant]="c.id !== courseId()"
+         [attr.title]="c.name">
+        {{ getCourseInitials(c) }}
+      </a>
+    }
+    <div class="border-t border-outline-variant w-8"></div>
+    <a routerLink="/app/courses/new"
+       class="w-12 h-12 rounded-xl flex items-center justify-center text-lg
+              bg-surface-container-high text-on-surface-variant
+              hover:bg-primary-container hover:text-on-primary-container transition-colors">
+      <span class="material-symbols-outlined">add</span>
+    </a>
+  </div>
+
+  <app-course-sidebar [course]="course()"
+                       [channels]="channels()"
+                       [categories]="categories()"
+                       [activeChannelIndex]="activeChannelIndex()"
+                       [memberCount]="memberCount()"
+                       (createChannel)="openCreateChannelModal()" />
+
+  <div class="flex-1 flex flex-col bg-surface min-w-0">
+    <router-outlet />
+  </div>
+</div>
+
+<!-- Modal: Create Channel -->
+<app-modal [isOpen]="showCreateChannelModal()" [title]="'Añadir canal'" (close)="closeCreateChannelModal()">
+  <div class="flex flex-col gap-md">
+    <div class="flex flex-col gap-sm">
+      <label class="text-body-sm text-on-surface-variant">Nombre</label>
+      <input ui-input [(ngModel)]="channelName" placeholder="Nombre del canal" />
+    </div>
+
+    <div class="flex flex-col gap-sm">
+      <label class="text-body-sm text-on-surface-variant">Tipo</label>
+      <select [(ngModel)]="channelType"
+              class="bg-surface-container-high rounded-md px-md py-sm border-none outline-none
+                     text-body-base text-on-surface w-full">
+        @for (ct of channelTypes; track ct.value) {
+          <option [value]="ct.value">{{ ct.label }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="flex flex-col gap-sm">
+      <label class="text-body-sm text-on-surface-variant">Descripción</label>
+      <input ui-input [(ngModel)]="channelDescription" placeholder="Opcional" />
+    </div>
+
+    <label class="flex items-center gap-sm cursor-pointer">
+      <input type="checkbox" [(ngModel)]="channelIsLocked" class="accent-primary" />
+      <span class="text-body-sm">Canal bloqueado</span>
+    </label>
+
+    <div class="flex gap-md justify-end">
+      <button ui-button variant="ghost" (click)="closeCreateChannelModal()">Cancelar</button>
+      <button ui-button [disabled]="!channelName().trim() || creatingChannel()"
+              (click)="createChannel()">
+        Crear canal
+      </button>
+    </div>
+  </div>
+</app-modal>
