@@ -22,10 +22,7 @@
       }
 
       <div class="flex-1"></div>
-      <button type="button"
-        class="w-9 h-9 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
-        <span class="material-symbols-outlined text-[20px]">notifications</span>
-      </button>
+      <app-notification-panel />
       <button type="button" (click)="toggleThemeMenu()"
         class="w-9 h-9 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors relative">
         <span class="material-symbols-outlined text-[20px]">settings</span>
@@ -73,5 +70,6 @@
     <main class="flex-1 overflow-y-auto">
       <router-outlet />
     </main>
+    <app-notification-toast />
   </div>
 </div>

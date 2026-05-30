@@ -5,6 +5,8 @@ import { Subscription } from 'rxjs';
 import { SidebarComponent, type NavItem } from '../../shared/ui/sidebar/sidebar.component';
 import { LogoComponent } from '../../shared/ui/logo/logo.component';
 import { AuthService } from '../../shared/services/auth.service';
+import { NotificationPanelComponent } from '../notification-panel/notification-panel.component';
+import { NotificationToastComponent } from '../../shared/ui/notification-toast/notification-toast.component';
 
 const MAIN_NAV_ITEMS: NavItem[] = [
   { label: 'Feed', route: '/app/feed', icon: 'home', exact: true },
@@ -18,7 +20,7 @@ const MAIN_NAV_ITEMS: NavItem[] = [
 @Component({
   selector: 'app-main-layout',
   standalone: true,
-  imports: [RouterOutlet, SidebarComponent, LogoComponent],
+  imports: [RouterOutlet, SidebarComponent, LogoComponent, NotificationPanelComponent, NotificationToastComponent],
   templateUrl: './main-layout.component.html',
 })
 export class MainLayoutComponent implements OnInit, OnDestroy {
