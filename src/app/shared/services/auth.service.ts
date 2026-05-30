@@ -48,6 +48,7 @@ export interface UserResponse {
 }
 
 export interface AuthResponse {
+  accessToken?: string;
   user: UserResponse;
 }
 
@@ -130,7 +131,12 @@ export class AuthService {
 
   login(data: LoginRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, data).pipe(
-      tap((res) => this.userProfile.set(res.user)),
+      tap((res) => {
+        if (res.accessToken) {
+          localStorage.setItem('wsToken', res.accessToken);
+        }
+        this.userProfile.set(res.user);
+      }),
       tap(() => this.loadCurrentUser()),
     );
   }
@@ -140,6 +146,7 @@ export class AuthService {
       tap(() => {
         this.currentUser.set(null);
         this.userProfile.set(null);
+        localStorage.removeItem('wsToken');
       }),
     );
   }
@@ -161,7 +168,13 @@ export class AuthService {
   }
 
   refresh(): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/refresh`, {});
+    return this.http.post<AuthResponse>(`${this.apiUrl}/refresh`, {}).pipe(
+      tap((res) => {
+        if (res.accessToken) {
+          localStorage.setItem('wsToken', res.accessToken);
+        }
+      }),
+    );
   }
 
   me(): Observable<JwtPayloadResponse> {
