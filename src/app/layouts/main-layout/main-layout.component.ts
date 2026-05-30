@@ -3,6 +3,7 @@ import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { SidebarComponent, type NavItem } from '../../shared/ui/sidebar/sidebar.component';
+import { LogoComponent } from '../../shared/ui/logo/logo.component';
 import { AuthService } from '../../shared/services/auth.service';
 
 const MAIN_NAV_ITEMS: NavItem[] = [
@@ -17,7 +18,7 @@ const MAIN_NAV_ITEMS: NavItem[] = [
 @Component({
   selector: 'app-main-layout',
   standalone: true,
-  imports: [RouterOutlet, SidebarComponent],
+  imports: [RouterOutlet, SidebarComponent, LogoComponent],
   templateUrl: './main-layout.component.html',
 })
 export class MainLayoutComponent implements OnInit, OnDestroy {
@@ -34,6 +35,9 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
   displayName = this.auth.displayName;
   initials = this.auth.initials;
   displayRole = this.auth.displayRole;
+  theme = this.auth.theme;
+
+  showThemeMenu = signal(false);
 
   ngOnInit() {
     this.updateInCourse();
@@ -54,5 +58,18 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
 
   toggleSidebar() {
     this.isSidebarOpen.update((v) => !v);
+  }
+
+  toggleThemeMenu() {
+    this.showThemeMenu.update((v) => !v);
+  }
+
+  closeThemeMenu() {
+    this.showThemeMenu.set(false);
+  }
+
+  setTheme(theme: 'dark' | 'light') {
+    this.auth.setTheme(theme);
+    this.closeThemeMenu();
   }
 }
