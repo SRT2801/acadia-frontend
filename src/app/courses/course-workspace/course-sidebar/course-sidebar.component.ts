@@ -15,6 +15,7 @@ export class CourseSidebarComponent {
   categories = input<ChannelCategory[]>([]);
   activeChannelIndex = input(0);
   memberCount = input(0);
+  canCreateChannel = input(false);
 
   createChannel = output<void>();
 

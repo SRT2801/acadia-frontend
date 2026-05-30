@@ -48,12 +48,14 @@
   <div class="border-t border-outline-variant my-sm shrink-0"></div>
 
   <div class="px-sm pb-md shrink-0">
+    @if (canCreateChannel()) {
     <button (click)="createChannel.emit()" class="flex items-center gap-sm px-sm py-xs rounded-md text-body-sm
                    text-on-surface-variant hover:bg-surface-container-high transition-colors
                    w-full text-left cursor-pointer bg-transparent border-none">
       <span class="material-symbols-outlined text-lg">add</span>
       Añadir canal
     </button>
+    }
 
     <a [routerLink]="['./members']" class="flex items-center gap-sm px-sm py-xs rounded-md text-body-sm
               text-on-surface-variant hover:bg-surface-container-high transition-colors
