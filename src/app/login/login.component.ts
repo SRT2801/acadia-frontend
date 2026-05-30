@@ -10,6 +10,7 @@ import { CardHeaderComponent } from '../shared/ui/card-header/card-header.compon
 import { CardContentComponent } from '../shared/ui/card-content/card-content.component';
 import { AuthService } from '../shared/services/auth.service';
 import { AlertService } from '../shared/services/alert.service';
+import { SpinnerService } from '../shared/services/spinner.service';
 
 @Component({
   selector: 'app-login',
@@ -33,6 +34,7 @@ export class LoginComponent {
   private auth = inject(AuthService);
   private router = inject(Router);
   private alert = inject(AlertService);
+  private spinnerService = inject(SpinnerService);
 
   loginForm = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
@@ -58,14 +60,17 @@ export class LoginComponent {
     }
 
     this.isSubmitting.set(true);
+    this.spinnerService.show();
 
     const { email, password } = this.loginForm.getRawValue();
 
     this.auth.login({ email, password }).subscribe({
       next: () => {
+        this.spinnerService.hide();
         this.router.navigate(['/app/feed']);
       },
       error: (err) => {
+        this.spinnerService.hide();
         this.isSubmitting.set(false);
         const message = err.error?.message || 'Invalid credentials. Please check your email and password.';
         this.alert.error(message);
