@@ -27,8 +27,8 @@ export class SidebarComponent {
 
   displayName = this.auth.displayName;
   initials = this.auth.initials;
-  displayUsername = this.auth.displayUsername;
   displayRole = this.auth.displayRole;
+  userEmail = this.auth.userEmail;
 
   logout() {
     this.refreshState.reset();

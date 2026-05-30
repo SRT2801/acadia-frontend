@@ -55,7 +55,6 @@ export class RegisterComponent {
   registerForm = this.fb.nonNullable.group({
     firstName: ['', [Validators.required]],
     lastName: ['', [Validators.required]],
-    username: ['', [Validators.required, Validators.minLength(3)]],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(8)]],
   });
@@ -124,7 +123,6 @@ export class RegisterComponent {
       this.authService.register({
         firstName: formValue.firstName,
         lastName: formValue.lastName,
-        username: formValue.username,
         email: formValue.email,
         password: formValue.password,
         ...(universityId ? { universityId } : {}),

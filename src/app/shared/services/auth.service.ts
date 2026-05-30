@@ -11,7 +11,6 @@ export interface LoginRequest {
 export interface RegisterRequest {
   firstName: string;
   lastName: string;
-  username: string;
   email: string;
   password: string;
   universityId?: number;
@@ -35,7 +34,6 @@ export interface ResetPasswordRequest {
 export interface UserResponse {
   id: number;
   email: string;
-  username: string;
   firstName: string;
   lastName: string;
   avatar?: string;
@@ -88,14 +86,12 @@ export class AuthService {
     return email.slice(0, 2).toUpperCase();
   });
 
-  readonly displayUsername = computed(() => {
-    const profile = this.userProfile();
-    if (profile) return `@${profile.username}`;
-    return this.currentUser()?.email ?? '';
-  });
-
   readonly displayRole = computed(() => {
     return this.currentUser()?.roleName ?? '';
+  });
+
+  readonly userEmail = computed(() => {
+    return this.currentUser()?.email ?? '';
   });
 
   readonly canCreateCourse = computed(() => {
@@ -103,6 +99,34 @@ export class AuthService {
     if (!user) return false;
     return user.roleName !== 'STUDENT' || user.permissions.includes('course:create');
   });
+
+  readonly canCreateChannel = computed(() => {
+    const user = this.currentUser();
+    if (!user) return false;
+    return user.roleName !== 'STUDENT' || user.permissions.includes('channel:create');
+  });
+
+  readonly theme = signal<'dark' | 'light'>(
+    (typeof window !== 'undefined' ? localStorage.getItem('theme') : null) as 'dark' | 'light' ?? 'dark'
+  );
+
+  setTheme(theme: 'dark' | 'light') {
+    this.theme.set(theme);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('theme', theme);
+      document.documentElement.classList.toggle('light', theme === 'light');
+    }
+  }
+
+  toggleTheme() {
+    this.setTheme(this.theme() === 'dark' ? 'light' : 'dark');
+  }
+
+  applyTheme() {
+    if (typeof document !== 'undefined') {
+      document.documentElement.classList.toggle('light', this.theme() === 'light');
+    }
+  }
 
   login(data: LoginRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, data).pipe(

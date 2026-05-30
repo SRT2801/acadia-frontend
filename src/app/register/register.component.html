@@ -29,17 +29,7 @@
             </div>
           </div>
 
-          <div class="flex gap-md">
-            <div class="flex flex-col gap-xs flex-1">
-              <label for="username" class="text-body-sm text-on-surface">Username</label>
-              <div class="relative">
-                <span
-                  class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[18px] text-on-surface-variant pointer-events-none">person</span>
-                <input id="username" type="text" ui-input [hasError]="isFieldInvalid('username')" [iconLeft]="true"
-                  formControlName="username" autocomplete="username" placeholder="johndoe" />
-              </div>
-            </div>
-            <div class="flex flex-col gap-xs flex-1">
+          <div class="flex flex-col gap-xs flex-1">
               <label for="email" class="text-body-sm text-on-surface">Email Address</label>
               <div class="relative">
                 <span
@@ -48,7 +38,6 @@
                   formControlName="email" autocomplete="email" placeholder="john@university.edu" />
               </div>
             </div>
-          </div>
 
           <div class="flex gap-md">
             <div class="flex flex-col gap-xs flex-1">
