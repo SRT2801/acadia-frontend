@@ -10,6 +10,7 @@ import { InputDirective } from '../../shared/ui/input/input.directive';
 import { FormsModule } from '@angular/forms';
 import { CoursesService, Course, Channel, ChannelCategory } from '../../shared/services/courses.service';
 import { AlertService } from '../../shared/services/alert.service';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
   selector: 'app-course-workspace',
@@ -31,6 +32,7 @@ export class CourseWorkspaceComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   private coursesService = inject(CoursesService);
   private alert = inject(AlertService);
+  auth = inject(AuthService);
 
   private routerSub?: Subscription;
   private paramSub?: Subscription;

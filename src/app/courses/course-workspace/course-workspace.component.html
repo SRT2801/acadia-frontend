@@ -35,6 +35,7 @@
                        [categories]="categories()"
                        [activeChannelIndex]="activeChannelIndex()"
                        [memberCount]="memberCount()"
+                       [canCreateChannel]="auth.canCreateChannel()"
                        (createChannel)="openCreateChannelModal()" />
 
   <div class="flex-1 flex flex-col bg-surface min-w-0">
