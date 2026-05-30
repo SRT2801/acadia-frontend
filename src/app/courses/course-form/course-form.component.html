@@ -130,33 +130,36 @@
 <app-modal
   [isOpen]="showSuccessModal()"
   title="Materia creada exitosamente"
-  (close)="goToCourses()">
+  (close)="closeModal()">
   <div class="flex flex-col gap-lg items-center text-center">
-    <div class="w-12 h-12 rounded-full bg-secondary/20 flex items-center justify-center">
-      <span class="material-symbols-outlined text-secondary text-[28px]">check_circle</span>
+    <div class="w-14 h-14 rounded-full bg-secondary/20 flex items-center justify-center">
+      <span class="material-symbols-outlined text-secondary text-[32px]">check_circle</span>
     </div>
 
-    <p class="text-body-base text-on-surface-variant">
-      Comparte este código con tus alumnos para que puedan unirse:
-    </p>
+    <div class="flex flex-col gap-sm">
+      <p class="text-body-base text-on-surface-variant">
+        Comparte este código con tus alumnos para que puedan unirse:
+      </p>
+    </div>
 
-    <div class="flex items-center gap-sm w-full max-w-xs">
-      <code class="flex-1 bg-surface-container-high border border-outline-variant rounded-lg px-lg py-sm text-headline-md text-on-surface font-mono tracking-[0.2em] text-center select-all">
+    <div class="bg-surface-container-high rounded-xl px-xl py-lg w-full">
+      <code class="block text-headline-lg text-on-surface font-mono tracking-[0.3em] text-center select-all break-all">
         {{ invitationCode() }}
       </code>
-      <button
-        type="button"
-        (click)="copyCode()"
-        class="inline-flex items-center gap-xs h-10 px-md bg-primary-container text-on-primary-container font-semibold text-body-sm rounded-lg hover:brightness-110 active:scale-95 transition-all shrink-0">
-        <span class="material-symbols-outlined text-[18px]">content_copy</span>
-        {{ copyLabel() }}
-      </button>
     </div>
 
     <button
       type="button"
+      (click)="copyCode()"
+      class="inline-flex items-center gap-xs h-10 px-lg bg-surface-container-high border border-outline-variant text-on-surface font-semibold text-body-sm rounded-lg hover:bg-surface-container-highest active:scale-95 transition-all">
+      <span class="material-symbols-outlined text-[18px]">{{ copyLabel() === 'Copiar' ? 'content_copy' : 'check' }}</span>
+      {{ copyLabel() }}
+    </button>
+
+    <button
+      type="button"
       (click)="goToCourses()"
-      class="inline-flex items-center h-10 px-lg bg-primary-container text-background font-bold text-body-sm rounded-md hover:brightness-110 active:scale-95 transition-all w-full max-w-xs justify-center">
+      class="inline-flex items-center h-10 px-xl bg-primary-container text-on-primary-container font-bold text-body-sm rounded-lg hover:brightness-110 active:scale-95 transition-all w-full justify-center">
       Ir a mis materias
     </button>
   </div>

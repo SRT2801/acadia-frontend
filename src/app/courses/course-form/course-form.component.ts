@@ -70,6 +70,10 @@ export class CourseFormComponent implements OnInit, OnDestroy {
     this.router.navigate(['/app/courses']);
   }
 
+  closeModal() {
+    this.showSuccessModal.set(false);
+  }
+
   onSubmit() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
