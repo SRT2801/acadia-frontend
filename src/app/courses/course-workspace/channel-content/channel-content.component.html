@@ -1,6 +1,5 @@
 @if (loading()) {
   <div class="flex-1 flex items-center justify-center">
-    <div class="spinner"></div>
   </div>
 }
 
@@ -28,48 +27,155 @@
       </div>
     </header>
 
-    <div class="flex-1 flex flex-col items-center justify-center p-xl relative overflow-y-auto">
-      <div class="absolute inset-0 dot-grid-bg pointer-events-none"></div>
+    @switch (ch.type) {
+      @case ('ANNOUNCEMENT') {
+        <div class="flex-1 flex flex-col overflow-hidden">
+          <div #messagesContainer class="flex-1 overflow-y-auto p-lg">
+            @if (announcements().length === 0) {
+              <div class="flex flex-col items-center justify-center h-full">
+                <div class="w-32 h-32 rounded-full bg-surface-container-low border border-outline-variant flex items-center justify-center mb-lg relative overflow-hidden">
+                  <div class="absolute inset-0 bg-primary/5 animate-pulse"></div>
+                  <span class="material-symbols-outlined !text-[56px] text-primary relative z-10">campaign</span>
+                </div>
+                <h2 class="font-headline-md text-[22px] text-on-background mb-sm tracking-tight">Canal de anuncios</h2>
+                <p class="font-body-base text-on-surface-variant max-w-[280px]">
+                  Los anuncios del curso aparecerán aquí. Solo los profesores pueden publicar.
+                </p>
+              </div>
+            } @else {
+              <div class="flex flex-col gap-md max-w-2xl mx-auto">
+                @for (ann of announcements(); track trackByAnnouncement($index, ann)) {
+                  <div class="bg-surface-container-high border border-outline-variant rounded-xl p-md"
+                       [class.border-l-4]="ann.pinned"
+                       [class.border-l-primary]="ann.pinned">
+                    <div class="flex items-start gap-md">
+                      <div class="flex-1">
+                        <div class="flex items-center gap-sm mb-xs">
+                          @if (ann.pinned) {
+                            <span class="material-symbols-outlined text-primary text-[16px]">push_pin</span>
+                          }
+                          <span class="text-body-sm font-bold text-on-background">{{ ann.title }}</span>
+                          @if (ann.priority === 'URGENT') {
+                            <span class="px-xs py-[2px] bg-error/20 text-error text-[10px] font-bold rounded">URGENTE</span>
+                          } @else if (ann.priority === 'HIGH') {
+                            <span class="px-xs py-[2px] bg-warning/20 text-warning text-[10px] font-bold rounded">ALTA</span>
+                          }
+                        </div>
+                        <p class="text-body-sm text-on-surface-variant">{{ ann.content }}</p>
+                        <div class="flex items-center gap-sm mt-sm text-[12px] text-on-surface-variant/60">
+                          <span>{{ ann.user?.firstName }} {{ ann.user?.lastName }}</span>
+                          <span>·</span>
+                          <span>{{ formatDate(ann.createdAt) }}</span>
+                        </div>
+                      </div>
+                      @if (currentUserId() === ann.userId) {
+                        <div class="flex items-center gap-xs">
+                          <button (click)="togglePin(ann.id)"
+                                  class="p-xs rounded hover:bg-surface-container-low transition-colors"
+                                  [class.text-primary]="ann.pinned">
+                            <span class="material-symbols-outlined text-[18px]">push_pin</span>
+                          </button>
+                          <button (click)="deleteAnnouncement(ann.id)"
+                                  class="p-xs rounded hover:bg-surface-container-low transition-colors text-on-surface-variant hover:text-error">
+                            <span class="material-symbols-outlined text-[18px]">delete</span>
+                          </button>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      }
+      @case ('TEXT') {
+        <div class="flex-1 flex flex-col overflow-hidden">
+          <div #messagesContainer class="flex-1 overflow-y-auto p-lg">
+            @if (showMessagesEmpty()) {
+              <div class="flex flex-col items-center justify-center h-full">
+                <div class="w-32 h-32 rounded-full bg-surface-container-low border border-outline-variant flex items-center justify-center mb-lg relative overflow-hidden">
+                  <div class="absolute inset-0 bg-primary/5 animate-pulse"></div>
+                  <span class="material-symbols-outlined !text-[56px] text-primary relative z-10">chat_bubble</span>
+                </div>
+                <h2 class="font-headline-md text-[22px] text-on-background mb-sm tracking-tight">Chat del curso</h2>
+                <p class="font-body-base text-on-surface-variant max-w-[280px]">
+                  El chat del curso aparecerá aquí. Envía un mensaje para comenzar la conversación con tus compañeros.
+                </p>
+              </div>
+            } @else {
+              <div class="flex flex-col gap-sm max-w-2xl mx-auto">
+                @for (msg of messages(); track trackByMessage($index, msg)) {
+                  <div class="flex gap-sm group"
+                       [class.flex-row-reverse]="isOwnMessage(msg)">
+                    <div class="w-8 h-8 rounded-full bg-surface-container-low flex items-center justify-center shrink-0">
+                      @if (msg.user?.avatar) {
+                        <img [src]="msg.user!.avatar" alt="" class="w-full h-full rounded-full object-cover" />
+                      } @else {
+                        <span class="text-[14px] font-bold text-on-surface-variant">
+                          {{ msg.user?.firstName?.[0] }}{{ msg.user?.lastName?.[0] }}
+                        </span>
+                      }
+                    </div>
+                    <div class="flex flex-col gap-xs"
+                         [class.items-end]="isOwnMessage(msg)">
+                      <div class="flex items-center gap-sm"
+                           [class.flex-row-reverse]="isOwnMessage(msg)">
+                        <span class="text-[13px] font-bold text-on-background">
+                          {{ msg.user?.firstName }} {{ msg.user?.lastName }}
+                        </span>
+                        <span class="text-[11px] text-on-surface-variant/60">{{ formatTime(msg.createdAt) }}</span>
+                      </div>
+                      <div class="px-md py-sm rounded-xl inline-block max-w-[75%]"
+                           [class.bg-primary]="isOwnMessage(msg)"
+                           [class.text-on-primary]="isOwnMessage(msg)"
+                           [class.bg-surface-container-high]="!isOwnMessage(msg)"
+                           [class.text-on-surface]="!isOwnMessage(msg)"
+                           style="word-break: break-word;">
+                        <p style="white-space: pre-wrap;">{{ msg.content }}</p>
+                      </div>
+                      @if (isOwnMessage(msg)) {
+                        <button (click)="deleteMessage(msg.id)"
+                                class="opacity-0 group-hover:opacity-100 p-xs rounded hover:bg-surface-container-low transition-all text-on-surface-variant hover:text-error text-[12px]">
+                          Eliminar
+                        </button>
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+          </div>
 
-      @switch (ch.type) {
-        @case ('ANNOUNCEMENT') {
-          <div class="fade-in max-w-md w-full flex flex-col items-center text-center">
-            <div class="w-32 h-32 rounded-full bg-surface-container-low border border-outline-variant flex items-center justify-center mb-lg relative overflow-hidden">
-              <div class="absolute inset-0 bg-primary/5 animate-pulse"></div>
-              <span class="material-symbols-outlined !text-[56px] text-primary relative z-10">campaign</span>
-            </div>
-            <h2 class="font-headline-md text-[22px] text-on-background mb-sm tracking-tight">Canal de anuncios</h2>
-            <p class="font-body-base text-on-surface-variant max-w-[280px]">
-              Los anuncios del curso aparecerán aquí. Solo los profesores pueden publicar.
-            </p>
-            <div class="mt-xl">
-              <button class="px-lg py-sm bg-primary text-on-primary font-bold rounded-lg hover:brightness-110 active:scale-95 transition-all flex items-center gap-sm">
-                <span class="material-symbols-outlined text-[20px]">edit</span>
-                Crear anuncio
+          <div class="shrink-0 px-lg pb-lg pt-sm">
+            <div class="bg-surface-container-high/50 border border-outline-variant p-sm rounded-xl flex items-center gap-md backdrop-blur-md">
+              <button class="w-8 h-8 rounded-full bg-surface-container-lowest border border-outline-variant flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+                <span class="material-symbols-outlined text-[20px]">add</span>
+              </button>
+              <input
+                type="text"
+                [ngModel]="newMessage()"
+                (ngModelChange)="newMessage.set($event)"
+                (keydown)="onKeydown($event)"
+                placeholder="Enviar mensaje a #{{ ch.name }}..."
+                class="flex-1 bg-transparent text-on-surface placeholder:text-on-surface-variant/60 outline-none text-body-sm" />
+              <div class="flex items-center gap-sm text-on-surface-variant">
+                <span class="material-symbols-outlined text-[18px] cursor-pointer hover:text-primary transition-colors">mood</span>
+                <span class="material-symbols-outlined text-[18px] cursor-pointer hover:text-primary transition-colors">attachment</span>
+              </div>
+              <button (click)="sendMessage()"
+                      [disabled]="sendingMessage() || !newMessage().trim()"
+                      class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed transition-all">
+                <span class="material-symbols-outlined text-[18px]">send</span>
               </button>
             </div>
           </div>
-        }
-        @case ('TEXT') {
-          <div class="fade-in max-w-md w-full flex flex-col items-center text-center">
-            <div class="w-32 h-32 rounded-full bg-surface-container-low border border-outline-variant flex items-center justify-center mb-lg relative overflow-hidden">
-              <div class="absolute inset-0 bg-primary/5 animate-pulse"></div>
-              <span class="material-symbols-outlined !text-[56px] text-primary relative z-10">chat_bubble</span>
-            </div>
-            <h2 class="font-headline-md text-[22px] text-on-background mb-sm tracking-tight">Chat del curso</h2>
-            <p class="font-body-base text-on-surface-variant max-w-[280px]">
-              El chat del curso aparecerá aquí. Envía un mensaje para comenzar la conversación con tus compañeros.
-            </p>
-            <div class="mt-xl">
-              <button class="px-lg py-sm bg-primary text-on-primary font-bold rounded-lg hover:brightness-110 active:scale-95 transition-all flex items-center gap-sm">
-                <span class="material-symbols-outlined text-[20px]">send</span>
-                Enviar primer mensaje
-              </button>
-            </div>
-          </div>
-        }
-        @case ('TASKS') {
-          <div class="fade-in max-w-md w-full flex flex-col items-center text-center">
+        </div>
+      }
+      @case ('TASKS') {
+        <div class="flex-1 flex flex-col items-center justify-center p-xl relative overflow-y-auto">
+          <div class="absolute inset-0 dot-grid-bg pointer-events-none"></div>
+          <div class="fade-in max-w-[448px] w-full flex flex-col items-center text-center">
             <div class="w-32 h-32 rounded-full bg-surface-container-low border border-outline-variant flex items-center justify-center mb-lg relative overflow-hidden">
               <div class="absolute inset-0 bg-primary/5 animate-pulse"></div>
               <span class="material-symbols-outlined !text-[56px] text-primary relative z-10">assignment</span>
@@ -85,9 +191,12 @@
               </button>
             </div>
           </div>
-        }
-        @case ('RESOURCES') {
-          <div class="fade-in max-w-md w-full flex flex-col items-center text-center">
+        </div>
+      }
+      @case ('RESOURCES') {
+        <div class="flex-1 flex flex-col items-center justify-center p-xl relative overflow-y-auto">
+          <div class="absolute inset-0 dot-grid-bg pointer-events-none"></div>
+          <div class="fade-in max-w-[448px] w-full flex flex-col items-center text-center">
             <div class="w-32 h-32 rounded-full bg-surface-container-low border border-outline-variant flex items-center justify-center mb-lg relative overflow-hidden">
               <div class="absolute inset-0 bg-primary/5 animate-pulse"></div>
               <span class="material-symbols-outlined !text-[56px] text-primary relative z-10">folder</span>
@@ -103,9 +212,12 @@
               </button>
             </div>
           </div>
-        }
-        @case ('FORUM') {
-          <div class="fade-in max-w-md w-full flex flex-col items-center text-center">
+        </div>
+      }
+      @case ('FORUM') {
+        <div class="flex-1 flex flex-col items-center justify-center p-xl relative overflow-y-auto">
+          <div class="absolute inset-0 dot-grid-bg pointer-events-none"></div>
+          <div class="fade-in max-w-[448px] w-full flex flex-col items-center text-center">
             <div class="w-32 h-32 rounded-full bg-surface-container-low border border-outline-variant flex items-center justify-center mb-lg relative overflow-hidden">
               <div class="absolute inset-0 bg-primary/5 animate-pulse"></div>
               <span class="material-symbols-outlined !text-[56px] text-primary relative z-10">forum</span>
@@ -121,9 +233,12 @@
               </button>
             </div>
           </div>
-        }
-        @case ('VOICE') {
-          <div class="fade-in max-w-md w-full flex flex-col items-center text-center">
+        </div>
+      }
+      @case ('VOICE') {
+        <div class="flex-1 flex flex-col items-center justify-center p-xl relative overflow-y-auto">
+          <div class="absolute inset-0 dot-grid-bg pointer-events-none"></div>
+          <div class="fade-in max-w-[448px] w-full flex flex-col items-center text-center">
             <div class="w-32 h-32 rounded-full bg-surface-container-low border border-outline-variant flex items-center justify-center mb-lg relative overflow-hidden">
               <div class="absolute inset-0 bg-primary/5 animate-pulse"></div>
               <span class="material-symbols-outlined !text-[56px] text-primary relative z-10">mic</span>
@@ -139,23 +254,8 @@
               </button>
             </div>
           </div>
-        }
-      }
-    </div>
-
-    @if (ch.type === 'TEXT') {
-      <div class="shrink-0 px-lg pb-lg pt-sm">
-        <div class="bg-surface-container-high/50 border border-outline-variant p-sm rounded-xl flex items-center gap-md backdrop-blur-md">
-          <button class="w-8 h-8 rounded-full bg-surface-container-lowest border border-outline-variant flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
-            <span class="material-symbols-outlined text-[20px]">add</span>
-          </button>
-          <div class="flex-1 text-on-surface-variant/60 font-body-base truncate">Enviar mensaje a #{{ ch.name }}...</div>
-          <div class="flex items-center gap-sm text-on-surface-variant">
-            <span class="material-symbols-outlined text-[18px] cursor-pointer hover:text-primary transition-colors">mood</span>
-            <span class="material-symbols-outlined text-[18px] cursor-pointer hover:text-primary transition-colors">attachment</span>
-          </div>
         </div>
-      </div>
+      }
     }
   </div>
 }
