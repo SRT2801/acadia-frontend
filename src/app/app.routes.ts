@@ -42,6 +42,41 @@ export const routes: Routes = [
         loadComponent: () => import('./courses/course-form/course-form.component').then((m) => m.CourseFormComponent),
       },
       {
+        path: 'courses/:id',
+        loadComponent: () =>
+          import('./courses/course-workspace/course-workspace.component').then(
+            (m) => m.CourseWorkspaceComponent,
+          ),
+        children: [
+          {
+            path: '',
+            pathMatch: 'full',
+            redirectTo: 'channel/0',
+          },
+          {
+            path: 'channel/:channelIndex',
+            loadComponent: () =>
+              import('./courses/course-workspace/channel-content/channel-content.component').then(
+                (m) => m.ChannelContentComponent,
+              ),
+          },
+          {
+            path: 'settings',
+            loadComponent: () =>
+              import('./courses/course-settings/course-settings.component').then(
+                (m) => m.CourseSettingsComponent,
+              ),
+          },
+          {
+            path: 'members',
+            loadComponent: () =>
+              import('./courses/course-members/course-members.component').then(
+                (m) => m.CourseMembersComponent,
+              ),
+          },
+        ],
+      },
+      {
         path: 'my-courses',
         loadComponent: () => import('./shared/ui/empty-state/empty-state.component').then((m) => m.EmptyStateComponent),
       },
