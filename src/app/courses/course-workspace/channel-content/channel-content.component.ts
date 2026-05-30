@@ -232,21 +232,14 @@ export class ChannelContentComponent implements OnInit, OnDestroy {
     return msg.userId === this.currentUserId();
   }
 
-  formatTime(dateStr: string): string {
+formatTime(dateStr: string): string {
     const date = new Date(dateStr);
-    return date.toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true,
-    });
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }
 
   formatDate(dateStr: string): string {
     const date = new Date(dateStr);
-    return date.toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-    });
+    return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
   }
 
   private scrollToBottom() {
