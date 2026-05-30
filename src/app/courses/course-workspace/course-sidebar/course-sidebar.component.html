@@ -1,0 +1,65 @@
+<div class="w-[240px] h-full bg-surface-container-lowest flex flex-col
+            border-r border-outline-variant shrink-0">
+  <div class="flex justify-between items-center p-md shrink-0">
+    <h2 class="text-headline-md truncate">{{ course()?.name }}</h2>
+    <a [routerLink]="['./settings']" class="text-on-surface-variant hover:text-on-surface p-xs rounded-md
+              hover:bg-surface-container-high transition-colors" title="Configuración">
+      <span class="material-symbols-outlined text-lg">settings</span>
+    </a>
+  </div>
+
+  <div class="flex-1 overflow-y-auto px-sm">
+    @for (cat of categories(); track cat.id) {
+    <div class="mb-sm">
+      <div class="text-label-caps text-on-surface-variant px-sm py-xs truncate">
+        {{ cat.name }}
+      </div>
+      @for (ch of getChannelsInCategory(cat.id); track ch.id) {
+      <a [routerLink]="['./channel', getChannelIndex(ch)]" class="flex items-center gap-sm px-sm py-1.5 rounded-md text-body-sm
+                    text-on-surface-variant hover:bg-surface-container-high
+                    hover:text-on-surface transition-colors no-underline cursor-pointer"
+        [class.bg-surface-container-high]="isChannelActive(ch)" [class.text-on-surface]="isChannelActive(ch)">
+        <span class="material-symbols-outlined text-lg">{{ channelIcon(ch) }}</span>
+        <span class="truncate flex-1">{{ ch.name }}</span>
+        @if (ch.isLocked) {
+        <span class="material-symbols-outlined text-sm shrink-0">lock</span>
+        }
+      </a>
+      }
+    </div>
+    }
+
+    @if (uncategorizedChannels().length > 0) {
+    @for (ch of uncategorizedChannels(); track ch.id) {
+    <a [routerLink]="['./channel', getChannelIndex(ch)]" class="flex items-center gap-sm px-sm py-1.5 rounded-md text-body-sm
+                  text-on-surface-variant hover:bg-surface-container-high
+                  hover:text-on-surface transition-colors no-underline cursor-pointer"
+      [class.bg-surface-container-high]="isChannelActive(ch)" [class.text-on-surface]="isChannelActive(ch)">
+      <span class="material-symbols-outlined text-lg">{{ channelIcon(ch) }}</span>
+      <span class="truncate flex-1">{{ ch.name }}</span>
+      @if (ch.isLocked) {
+      <span class="material-symbols-outlined text-sm shrink-0">lock</span>
+      }
+    </a>
+    }
+    }
+  </div>
+
+  <div class="border-t border-outline-variant my-sm shrink-0"></div>
+
+  <div class="px-sm pb-md shrink-0">
+    <button (click)="createChannel.emit()" class="flex items-center gap-sm px-sm py-xs rounded-md text-body-sm
+                   text-on-surface-variant hover:bg-surface-container-high transition-colors
+                   w-full text-left cursor-pointer bg-transparent border-none">
+      <span class="material-symbols-outlined text-lg">add</span>
+      Añadir canal
+    </button>
+
+    <a [routerLink]="['./members']" class="flex items-center gap-sm px-sm py-xs rounded-md text-body-sm
+              text-on-surface-variant hover:bg-surface-container-high transition-colors
+              no-underline">
+      <span class="material-symbols-outlined text-lg">groups</span>
+      Miembros ({{ memberCount() }})
+    </a>
+  </div>
+</div>
