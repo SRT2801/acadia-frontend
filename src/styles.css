@@ -81,6 +81,60 @@
   --font-label-caps: 'Switzer', sans-serif;
 }
 
+.light {
+  --color-on-primary-fixed: #001e2b;
+  --color-inverse-on-surface: #f0f1f2;
+  --color-on-tertiary: #ffffff;
+  --color-secondary-fixed: #9ff79f;
+  --color-surface-bright: #ffffff;
+  --color-primary: #006888;
+  --color-on-primary: #ffffff;
+  --color-surface: #f8f9fa;
+  --color-inverse-primary: #75d1ff;
+  --color-surface-container-high: #e6e8e9;
+  --color-tertiary-fixed-dim: #ffb86f;
+  --color-surface-variant: #dee3e8;
+  --color-surface-container-lowest: #ffffff;
+  --color-on-primary-container: #001e2b;
+  --color-on-tertiary-container: #291800;
+  --color-secondary-container: #cdffd0;
+  --color-on-secondary-container: #002105;
+  --color-on-tertiary-fixed-variant: #693c00;
+  --color-primary-fixed: #c2e8ff;
+  --color-surface-tint: #006888;
+  --color-secondary-fixed-dim: #1e6c2d;
+  --color-secondary: #2c6b34;
+  --color-on-secondary-fixed: #002105;
+  --color-surface-dim: #d9dbdc;
+  --color-tertiary-container: #ffdeab;
+  --color-background: #f8f9fa;
+  --color-error: #ba1a1a;
+  --color-on-secondary-fixed-variant: #005318;
+  --color-on-surface: #191c1e;
+  --color-outline: #72787e;
+  --color-on-primary-fixed-variant: #ffffff;
+  --color-surface-container-highest: #e1e2e4;
+  --color-on-error-container: #410002;
+  --color-tertiary-fixed: #ffdcbd;
+  --color-on-surface-variant: #42474e;
+  --color-primary-fixed-dim: #75d1ff;
+  --color-on-background: #191c1e;
+  --color-on-tertiary-fixed: #2c1600;
+  --color-on-secondary: #ffffff;
+  --color-outline-variant: #c2c8cd;
+  --color-inverse-surface: #2e3132;
+  --color-primary-container: #c2e8ff;
+  --color-on-error: #ffffff;
+  --color-tertiary: #805600;
+  --color-surface-container-low: #f2f4f5;
+  --color-error-container: #ffdad6;
+  --color-surface-container: #eceef0;
+}
+
+.light body {
+  background-color: #f8f9fa;
+}
+
 @layer base {
   body {
     background-color: #0f0f0f;
@@ -101,6 +155,15 @@
       rgba(15, 15, 15, 0) 50%
     );
   }
+
+  .square-grid-bg {
+    background-image:
+      linear-gradient(to right, var(--color-outline-variant) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--color-outline-variant) 1px, transparent 1px);
+    background-size: 32px 32px;
+    opacity: 0.15;
+  }
+
   .card-border {
     border: 1px solid #2a2a2a;
   }
@@ -261,4 +324,9 @@
     letter-spacing: 0.05em;
     text-transform: uppercase;
   }
+}
+
+.overflow-wrap-break-word {
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
