@@ -2,6 +2,7 @@ import { Component, signal, inject } from '@angular/core';
 import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { NgxSpinnerComponent } from 'ngx-spinner';
 import { CardFooterComponent } from './shared/ui/card-footer/card-footer.component';
+import { AuthService } from './shared/services/auth.service';
 import { filter } from 'rxjs';
 
 @Component({
@@ -11,10 +12,13 @@ import { filter } from 'rxjs';
 })
 export class App {
   private router = inject(Router);
+  private auth = inject(AuthService);
 
   showFooter = signal(true);
 
   constructor() {
+    this.auth.applyTheme();
+
     this.router.events
       .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
       .subscribe((event) => {
