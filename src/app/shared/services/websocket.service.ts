@@ -1,4 +1,4 @@
-import { Injectable, inject, signal, computed, OnDestroy } from '@angular/core';
+import { Injectable, inject, signal, computed, OnDestroy, effect } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { AuthService } from './auth.service';
 import { environment } from '../../../environments/environment';
@@ -42,11 +42,16 @@ export interface Announcement {
 export class WebSocketService implements OnDestroy {
   private auth = inject(AuthService);
   private socket: Socket | null = null;
+  private globalConnectionActive = false;
 
   readonly connected = signal(false);
   readonly messages = signal<Message[]>([]);
   readonly announcements = signal<Announcement[]>([]);
   readonly activeChannelId = signal<number | null>(null);
+
+  constructor() {
+    this.connectGlobal();
+  }
 
   private getJwtToken(): string | null {
     if (typeof localStorage === 'undefined') return null;
@@ -126,6 +131,26 @@ export class WebSocketService implements OnDestroy {
         anns.map((a) => (a.id === announcement.id ? announcement : a)),
       );
     });
+
+    this.socket.on('notification:created', (notification: any) => {
+      console.log('[WS] notification:created received:', notification);
+    });
+  }
+
+  connectGlobal() {
+    if (this.globalConnectionActive) return;
+    this.globalConnectionActive = true;
+
+    effect(() => {
+      const user = this.auth.currentUser();
+      if (user) {
+        this.connect();
+      } else {
+        this.disconnect();
+      }
+    });
+
+    this.connect();
   }
 
   disconnect() {
