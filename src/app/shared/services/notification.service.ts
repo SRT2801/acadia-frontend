@@ -1,9 +1,11 @@
 import { Injectable, inject, signal, OnDestroy, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
-import { WebSocketService } from './websocket.service';
+import { io, Socket } from 'socket.io-client';
 import { environment } from '../../../environments/environment';
 import { SoundService } from './sound.service';
+import { WebSocketService } from './websocket.service';
+import { AuthService } from './auth.service';
 
 export interface Notification {
   id: number;
@@ -27,12 +29,15 @@ export interface Notification {
 })
 export class NotificationService implements OnDestroy {
   private http = inject(HttpClient);
-  private wsService = inject(WebSocketService);
   private injector = inject(Injector);
+  private wsService = inject(WebSocketService);
+  private authService = inject(AuthService);
 
   private soundService: SoundService | null = null;
+  private notificationSocket: Socket | null = null;
 
   private readonly apiUrl = environment.apiUrl;
+  private readonly redisUrl = environment.redisUrl;
 
   readonly notifications = signal<Notification[]>([]);
   readonly unreadCount = signal(0);
@@ -52,31 +57,47 @@ export class NotificationService implements OnDestroy {
   }
 
   private setupWebSocketListener() {
-    let attempts = 0;
-    const maxAttempts = 50;
+    this.connectToRedisSocket();
+  }
 
-    const checkSocket = () => {
-      const socket = (this.wsService as any).socket;
-      if (socket && socket.connected) {
-        console.log('[NotificationService] Socket connected, listening for notifications');
-        socket.on('notification:created', (notification: Notification) => {
-          console.log('[NotificationService] New notification received:', notification);
-          this.handleNotification(notification);
-        });
-      } else if (attempts < maxAttempts) {
-        attempts++;
-        setTimeout(checkSocket, 100);
-      } else {
-        console.log('[NotificationService] Could not connect to socket after', maxAttempts, 'attempts');
-      }
-    };
-    checkSocket();
+  private connectToRedisSocket() {
+    if (this.notificationSocket?.connected) return;
+
+    const token = typeof localStorage !== 'undefined' ? localStorage.getItem('wsToken') : null;
+    if (!token) {
+      console.log('[NotificationService] No token, cannot connect to Redis socket');
+      return;
+    }
+
+    console.log('[NotificationService] Connecting to Redis WebSocket:', `${this.redisUrl}/notifications`);
+    this.notificationSocket = io(`${this.redisUrl}/notifications`, {
+      auth: { token },
+      transports: ['websocket', 'polling'],
+      withCredentials: true,
+    });
+
+    this.notificationSocket.on('connect', () => {
+      console.log('[NotificationService] Redis socket connected!');
+    });
+
+    this.notificationSocket.on('disconnect', () => {
+      console.log('[NotificationService] Redis socket disconnected');
+    });
+
+    this.notificationSocket.on('connect_error', (err) => {
+      console.error('[NotificationService] Redis socket connection error:', err.message);
+    });
+
+    this.notificationSocket.on('notification:created', (notification: Notification) => {
+      console.log('[NotificationService] New notification received:', notification);
+      this.handleNotification(notification);
+    });
   }
 
   private handleNotification(notification: Notification) {
-    const activeChannelId = (this.wsService as any).activeChannelId?.();
+    const activeChannelId = this.wsService.activeChannelId();
     const isUserInChannel = notification.channelId === activeChannelId;
-    const isFromCurrentUser = notification.senderId === (this.wsService as any).auth?.currentUser?.()?.userId;
+    const isFromCurrentUser = notification.senderId === this.authService.currentUser()?.userId;
 
     if (isUserInChannel || isFromCurrentUser) {
       console.log('[NotificationService] Skipping notification UI - user is in channel or is sender');
@@ -195,6 +216,8 @@ export class NotificationService implements OnDestroy {
   }
 
   ngOnDestroy() {
+    this.notificationSocket?.disconnect();
+    this.notificationSocket = null;
     this.clearToasts();
   }
 }
