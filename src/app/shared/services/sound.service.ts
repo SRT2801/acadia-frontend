@@ -1,63 +1,76 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { LoggerService } from '../utils/logger.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SoundService {
-  private audio: HTMLAudioElement | null = null;
-  private audioLoaded = false;
+  private notificationAudio: HTMLAudioElement | null = null;
+  private sendAudio: HTMLAudioElement | null = null;
+  private logger = inject(LoggerService);
 
   constructor() {
-    this.initAudio();
+    this.initNotificationAudio();
+    this.initSendAudio();
   }
 
-  private initAudio(): void {
+  private initNotificationAudio(): void {
     try {
-      this.audio = new Audio();
-      this.audio.src = '/assets/sounds/Voicy_Viber notification sound.mp3';
-      this.audio.volume = 0.5;
-      this.audio.preload = 'auto';
+      this.notificationAudio = new Audio();
+      this.notificationAudio.src = '/assets/sounds/MessageNotificacion.mp3';
+      this.notificationAudio.volume = 0.5;
+      this.notificationAudio.preload = 'auto';
 
-      this.audio.oncanplaythrough = () => {
-        console.log('[SoundService] Audio ready to play');
-        this.audioLoaded = true;
+      this.notificationAudio.onerror = (e) => {
+        this.logger.error('Notification audio loading error', e);
       };
 
-      this.audio.onloadeddata = () => {
-        console.log('[SoundService] Audio loaded');
-        this.audioLoaded = true;
-      };
-
-      this.audio.onerror = (e) => {
-        console.error('[SoundService] Audio error:', e);
-      };
-
-      this.audio.load();
+      this.notificationAudio.load();
     } catch (e) {
-      console.error('[SoundService] Error initializing audio:', e);
+      this.logger.error('Error initializing notification audio', e);
+    }
+  }
+
+  private initSendAudio(): void {
+    try {
+      this.sendAudio = new Audio();
+      this.sendAudio.src = '/assets/sounds/SendMessage.mp3';
+      this.sendAudio.volume = 0.1;
+      this.sendAudio.preload = 'auto';
+
+      this.sendAudio.onerror = (e) => {
+        this.logger.error('Send audio loading error', e);
+      };
+
+      this.sendAudio.load();
+    } catch (e) {
+      this.logger.error('Error initializing send audio', e);
+    }
+  }
+
+  async playNotificationSound(): Promise<void> {
+    try {
+      if (this.notificationAudio) {
+        this.notificationAudio.currentTime = 0;
+        await this.notificationAudio.play().catch(() => {});
+      }
+    } catch (e) {
+      this.logger.warn('Error playing notification sound');
+    }
+  }
+
+  async playSendSound(): Promise<void> {
+    try {
+      if (this.sendAudio) {
+        this.sendAudio.currentTime = 0;
+        await this.sendAudio.play().catch(() => {});
+      }
+    } catch (e) {
+      this.logger.warn('Error playing send sound');
     }
   }
 
   async playMessageSound(): Promise<void> {
-    try {
-      if (!this.audio) {
-        this.initAudio();
-      }
-
-      if (this.audio) {
-        this.audio.currentTime = 0;
-        console.log('[SoundService] Playing sound, loaded:', this.audioLoaded);
-
-        await this.audio.play().catch((e) => {
-          console.warn('[SoundService] Play catch:', e);
-        });
-      }
-    } catch (e: any) {
-      console.warn('[SoundService] Error:', e.message);
-    }
-  }
-
-  playNotificationSound() {
-    this.playMessageSound();
+    await this.playNotificationSound();
   }
 }
