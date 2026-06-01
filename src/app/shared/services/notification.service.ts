@@ -6,6 +6,7 @@ import { environment } from '../../../environments/environment';
 import { SoundService } from './sound.service';
 import { WebSocketService } from './websocket.service';
 import { AuthService } from './auth.service';
+import { LoggerService } from '../utils/logger.service';
 
 export interface Notification {
   id: number;
@@ -32,6 +33,7 @@ export class NotificationService implements OnDestroy {
   private injector = inject(Injector);
   private wsService = inject(WebSocketService);
   private authService = inject(AuthService);
+  private logger = inject(LoggerService);
 
   private soundService: SoundService | null = null;
   private notificationSocket: Socket | null = null;
@@ -65,11 +67,9 @@ export class NotificationService implements OnDestroy {
 
     const token = typeof localStorage !== 'undefined' ? localStorage.getItem('wsToken') : null;
     if (!token) {
-      console.log('[NotificationService] No token, cannot connect to Redis socket');
       return;
     }
 
-    console.log('[NotificationService] Connecting to Redis WebSocket:', `${this.redisUrl}/notifications`);
     this.notificationSocket = io(`${this.redisUrl}/notifications`, {
       auth: { token },
       transports: ['websocket', 'polling'],
@@ -77,19 +77,18 @@ export class NotificationService implements OnDestroy {
     });
 
     this.notificationSocket.on('connect', () => {
-      console.log('[NotificationService] Redis socket connected!');
+      this.logger.debug('Notification socket connected');
     });
 
     this.notificationSocket.on('disconnect', () => {
-      console.log('[NotificationService] Redis socket disconnected');
+      this.logger.debug('Notification socket disconnected');
     });
 
     this.notificationSocket.on('connect_error', (err) => {
-      console.error('[NotificationService] Redis socket connection error:', err.message);
+      this.logger.error('Notification socket connection error', err.message);
     });
 
     this.notificationSocket.on('notification:created', (notification: Notification) => {
-      console.log('[NotificationService] New notification received:', notification);
       this.handleNotification(notification);
     });
   }
@@ -100,7 +99,6 @@ export class NotificationService implements OnDestroy {
     const isFromCurrentUser = notification.senderId === this.authService.currentUser()?.userId;
 
     if (isUserInChannel || isFromCurrentUser) {
-      console.log('[NotificationService] Skipping notification UI - user is in channel or is sender');
       return;
     }
 
@@ -110,8 +108,6 @@ export class NotificationService implements OnDestroy {
     const soundService = this.getSoundService();
     if (soundService) {
       soundService.playMessageSound();
-    } else {
-      console.log('[NotificationService] Sound service not available');
     }
   }
 

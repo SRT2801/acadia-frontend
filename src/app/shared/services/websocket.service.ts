@@ -2,6 +2,7 @@ import { Injectable, inject, signal, computed, OnDestroy, effect } from '@angula
 import { io, Socket } from 'socket.io-client';
 import { AuthService } from './auth.service';
 import { environment } from '../../../environments/environment';
+import { LoggerService } from '../utils/logger.service';
 
 export interface Message {
   id: number;
@@ -41,6 +42,7 @@ export interface Announcement {
 })
 export class WebSocketService implements OnDestroy {
   private auth = inject(AuthService);
+  private logger = inject(LoggerService);
   private socket: Socket | null = null;
   private globalConnectionActive = false;
 
@@ -62,13 +64,10 @@ export class WebSocketService implements OnDestroy {
     if (this.socket?.connected) return;
 
     const token = this.getJwtToken();
-    console.log('[WS] Token found:', !!token);
     if (!token) {
-      console.log('[WS] No token, cannot connect');
       return;
     }
 
-    console.log('[WS] Connecting to', `${environment.apiUrl}/chat`);
     this.socket = io(`${environment.apiUrl}/chat`, {
       auth: { token },
       transports: ['websocket', 'polling'],
@@ -76,64 +75,55 @@ export class WebSocketService implements OnDestroy {
     });
 
     this.socket.on('connect', () => {
-      console.log('[WS] Connected!');
       this.connected.set(true);
     });
 
     this.socket.on('disconnect', () => {
-      console.log('[WS] Disconnected');
       this.connected.set(false);
     });
 
     this.socket.on('connect_error', (err) => {
-      console.error('[WS] Connection error:', err.message);
+      this.logger.error('WebSocket connection error', err.message);
     });
 
     this.socket.on('message:created', (message: Message) => {
-      console.log('[WS] message:created received:', message);
       this.messages.update((msgs) => [...msgs, message]);
     });
 
     this.socket.on('message:updated', (message: Message) => {
-      console.log('[WS] message:updated received:', message);
       this.messages.update((msgs) =>
         msgs.map((m) => (m.id === message.id ? message : m)),
       );
     });
 
     this.socket.on('message:deleted', (data: { id: number }) => {
-      console.log('[WS] message:deleted received:', data);
       this.messages.update((msgs) => msgs.filter((m) => m.id !== data.id));
     });
 
     this.socket.on('announcement:created', (announcement: Announcement) => {
-      console.log('[WS] announcement:created received:', announcement);
       this.announcements.update((anns) => [announcement, ...anns]);
     });
 
     this.socket.on('announcement:updated', (announcement: Announcement) => {
-      console.log('[WS] announcement:updated received:', announcement);
       this.announcements.update((anns) =>
         anns.map((a) => (a.id === announcement.id ? announcement : a)),
       );
     });
 
     this.socket.on('announcement:deleted', (data: { id: number }) => {
-      console.log('[WS] announcement:deleted received:', data);
       this.announcements.update((anns) =>
         anns.filter((a) => a.id !== data.id),
       );
     });
 
     this.socket.on('announcement:pinned', (announcement: Announcement) => {
-      console.log('[WS] announcement:pinned received:', announcement);
       this.announcements.update((anns) =>
         anns.map((a) => (a.id === announcement.id ? announcement : a)),
       );
     });
 
-    this.socket.on('notification:created', (notification: any) => {
-      console.log('[WS] notification:created received:', notification);
+    this.socket.on('notification:created', (notification: unknown) => {
+      this.logger.debug('Notification received via WebSocket');
     });
   }
 
@@ -163,15 +153,12 @@ export class WebSocketService implements OnDestroy {
   }
 
   joinChannel(channelId: number) {
-    console.log('[WS] joinChannel called with:', channelId);
-    console.log('[WS] Current socket connected:', this.socket?.connected);
     if (this.activeChannelId()) {
       this.leaveChannel(this.activeChannelId()!);
     }
     this.socket?.emit('joinChannel', { channelId });
     this.activeChannelId.set(channelId);
     this.messages.set([]);
-    console.log('[WS] Joined channel:', channelId);
   }
 
   leaveChannel(channelId: number) {
