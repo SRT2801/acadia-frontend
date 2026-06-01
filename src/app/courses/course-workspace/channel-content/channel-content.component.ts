@@ -9,6 +9,8 @@ import { WebSocketService, Message, Announcement } from '../../../shared/service
 import { MessagesService } from '../../../shared/services/messages.service';
 import { AuthService } from '../../../shared/services/auth.service';
 import { AlertService } from '../../../shared/services/alert.service';
+import { LoggerService } from '../../../shared/utils/logger.service';
+import { SoundService } from '../../../shared/services/sound.service';
 
 @Component({
   selector: 'app-channel-content',
@@ -28,6 +30,8 @@ export class ChannelContentComponent implements OnInit, OnDestroy {
   private messagesService = inject(MessagesService);
   private auth = inject(AuthService);
   private alert = inject(AlertService);
+  private logger = inject(LoggerService);
+  private soundService = inject(SoundService);
 
   channel = signal<Channel | null>(null);
   loading = signal(true);
@@ -129,33 +133,24 @@ export class ChannelContentComponent implements OnInit, OnDestroy {
   }
 
   private initChannel(channel: Channel) {
-    console.log('[Channel] initChannel:', channel);
     if (!this.wsService.connected()) {
-      console.log('[Channel] WS not connected, connecting...');
       this.wsService.connect();
-    } else {
-      console.log('[Channel] WS already connected');
     }
 
     if (this.wsService.activeChannelId() && this.wsService.activeChannelId() !== channel.id) {
-      console.log('[Channel] Leaving previous channel:', this.wsService.activeChannelId());
       this.wsService.leaveChannel(this.wsService.activeChannelId()!);
     }
 
     if (channel.type === 'TEXT' || channel.type === 'ANNOUNCEMENT') {
-      console.log('[Channel] Joining channel:', channel.id);
       this.wsService.joinChannel(channel.id);
       this.loadChannelContent(channel);
     }
   }
 
   private loadChannelContent(channel: Channel) {
-    console.log('[Channel] loadChannelContent:', channel.type);
     if (channel.type === 'TEXT') {
-      console.log('[Channel] Loading messages via REST...');
       this.messagesService.getMessages(channel.id).subscribe({
         next: (messages) => {
-          console.log('[Channel] Messages loaded:', messages.length, messages);
           this.wsService.messages.set(messages);
         },
         error: (err) => {
@@ -163,10 +158,8 @@ export class ChannelContentComponent implements OnInit, OnDestroy {
         },
       });
     } else if (channel.type === 'ANNOUNCEMENT') {
-      console.log('[Channel] Loading announcements via REST...');
       this.messagesService.getAnnouncements(channel.id).subscribe({
         next: (announcements) => {
-          console.log('[Channel] Announcements loaded:', announcements.length);
           this.wsService.announcements.set(announcements);
         },
         error: (err) => {
@@ -179,18 +172,16 @@ export class ChannelContentComponent implements OnInit, OnDestroy {
   sendMessage() {
     const content = this.newMessage().trim();
     const ch = this.channel();
-    console.log('[Channel] sendMessage called:', content, 'channel:', ch?.id);
     if (!content || !ch || ch.type !== 'TEXT') return;
 
     this.sendingMessage.set(true);
     this.messagesService.createMessage({ content, channelId: ch.id }).subscribe({
       next: () => {
-        console.log('[Channel] Message sent successfully');
         this.newMessage.set('');
         this.sendingMessage.set(false);
+        this.soundService.playSendSound();
       },
       error: (err) => {
-        console.error('[Channel] Error sending message:', err);
         this.sendingMessage.set(false);
         this.alert.error(err.error?.message ?? 'Error sending message');
       },
