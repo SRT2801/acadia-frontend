@@ -7,7 +7,7 @@ import {
 } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, switchMap, throwError, timeout, Observable } from 'rxjs';
+import { catchError, switchMap, throwError, timeout } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { RefreshStateService } from '../services/refresh-state.service';
 
