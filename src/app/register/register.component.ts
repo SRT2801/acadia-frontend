@@ -13,6 +13,9 @@ import { AuthService } from '../shared/services/auth.service';
 import { UniversitiesService, University } from '../shared/services/universities.service';
 import { SpinnerService } from '../shared/services/spinner.service';
 import { AlertService } from '../shared/services/alert.service';
+import { RateLimitService } from '../shared/services/rate-limit.service';
+
+const PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
 @Component({
   selector: 'app-register',
@@ -38,6 +41,7 @@ export class RegisterComponent {
   private router = inject(Router);
   private spinner = inject(SpinnerService);
   private alert = inject(AlertService);
+  private rateLimit = inject(RateLimitService);
 
   universities = signal<University[]>([]);
   universityOptions = computed<AutocompleteOption[]>(() =>
@@ -52,18 +56,24 @@ export class RegisterComponent {
   showUniversityPicker = signal(false);
   universityError = signal('');
 
+  private passwordValue = signal('');
+
   registerForm = this.fb.nonNullable.group({
     firstName: ['', [Validators.required]],
     lastName: ['', [Validators.required]],
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(8)]],
+    password: ['', [
+      Validators.required,
+      Validators.minLength(8),
+      Validators.pattern(PASSWORD_PATTERN),
+    ]],
   });
 
   showPassword = signal(false);
   isSubmitting = signal(false);
 
   passwordStrength = computed(() => {
-    const val = this.registerForm.get('password')?.value ?? '';
+    const val = this.passwordValue();
     if (!val) return { label: 'None', level: 0 };
     let score = 0;
     if (val.length >= 8) score++;
@@ -91,6 +101,11 @@ export class RegisterComponent {
         next: (universities) => this.universities.set(universities),
       });
     });
+
+    this.registerForm.get('password')?.valueChanges.subscribe((value) => {
+      this.passwordValue.set(value ?? '');
+    });
+    this.passwordValue.set(this.registerForm.get('password')?.value ?? '');
   }
 
   togglePassword() {
@@ -114,6 +129,12 @@ export class RegisterComponent {
 
   onSubmit() {
     if (this.registerForm.valid) {
+      if (this.rateLimit.isBlocked('register')) {
+        const waitSeconds = Math.ceil(this.rateLimit.getRemainingTime('register') / 1000);
+        this.alert.error(`Demasiados intentos. Esperá ${waitSeconds} segundos antes de intentar de nuevo.`);
+        return;
+      }
+
       this.isSubmitting.set(true);
       this.spinner.show();
 
@@ -130,12 +151,14 @@ export class RegisterComponent {
         next: () => {
           this.spinner.hide();
           this.isSubmitting.set(false);
-          this.alert.success('Account created successfully! Check your email to verify your account.');
+          this.rateLimit.clear('register');
+          this.alert.success('Cuenta creada exitosamente. Verificá tu email para confirmar tu cuenta.');
           this.router.navigate(['/verify-email']);
         },
         error: (err) => {
           this.spinner.hide();
           this.isSubmitting.set(false);
+          this.rateLimit.recordAttempt('register');
 
           const detailsMessage: string | undefined = err.error?.details?.message;
           const message: string | undefined = err.error?.message;
@@ -146,11 +169,11 @@ export class RegisterComponent {
           ) {
             this.showUniversityPicker.set(true);
             this.universityError.set(
-              detailsMessage ?? message ?? 'Please select your university.',
+              detailsMessage ?? message ?? 'Por favor seleccioná tu universidad.',
             );
           } else {
             this.alert.error(
-              detailsMessage ?? message ?? 'Registration failed. Please try again.',
+              detailsMessage ?? message ?? 'El registro falló. Por favor intentá de nuevo.',
             );
           }
         },

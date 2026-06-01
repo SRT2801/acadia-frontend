@@ -14,6 +14,8 @@ import { AlertService } from '../shared/services/alert.service';
 
 export type ResetPasswordState = 'no-token' | 'form' | 'submitting' | 'success' | 'error';
 
+const PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
 function passwordsMatchValidator(control: AbstractControl): ValidationErrors | null {
   const password = control.get('newPassword');
   const confirm = control.get('confirmPassword');
@@ -52,7 +54,12 @@ export class ResetPasswordComponent {
   token = signal('');
 
   resetForm = this.fb.nonNullable.group({
-    newPassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(128)]],
+    newPassword: ['', [
+      Validators.required,
+      Validators.minLength(8),
+      Validators.maxLength(128),
+      Validators.pattern(PASSWORD_PATTERN),
+    ]],
     confirmPassword: ['', [Validators.required]],
   }, { validators: passwordsMatchValidator });
 

@@ -11,6 +11,7 @@ import { CardContentComponent } from '../shared/ui/card-content/card-content.com
 import { AuthService } from '../shared/services/auth.service';
 import { AlertService } from '../shared/services/alert.service';
 import { SpinnerService } from '../shared/services/spinner.service';
+import { RateLimitService } from '../shared/services/rate-limit.service';
 
 @Component({
   selector: 'app-login',
@@ -35,6 +36,7 @@ export class LoginComponent {
   private router = inject(Router);
   private alert = inject(AlertService);
   private spinnerService = inject(SpinnerService);
+  private rateLimit = inject(RateLimitService);
 
   loginForm = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
@@ -59,6 +61,12 @@ export class LoginComponent {
       return;
     }
 
+    if (this.rateLimit.isBlocked('login')) {
+      const waitSeconds = Math.ceil(this.rateLimit.getRemainingTime('login') / 1000);
+      this.alert.error(`Demasiados intentos. Esperá ${waitSeconds} segundos antes de intentar de nuevo.`);
+      return;
+    }
+
     this.isSubmitting.set(true);
     this.spinnerService.show();
 
@@ -67,12 +75,14 @@ export class LoginComponent {
     this.auth.login({ email, password }).subscribe({
       next: () => {
         this.spinnerService.hide();
+        this.rateLimit.clear('login');
         this.router.navigate(['/app/feed']);
       },
       error: (err) => {
         this.spinnerService.hide();
         this.isSubmitting.set(false);
-        const message = err.error?.message || 'Invalid credentials. Please check your email and password.';
+        this.rateLimit.recordAttempt('login');
+        const message = err.error?.message || 'Credenciales inválidas. Verificá tu email y contraseña.';
         this.alert.error(message);
       },
     });
