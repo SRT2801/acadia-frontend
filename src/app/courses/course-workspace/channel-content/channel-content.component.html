@@ -14,10 +14,10 @@
         <div
           class="w-32 h-32 rounded-full bg-surface-container-low border border-outline-variant flex items-center justify-center mb-lg relative overflow-hidden">
           <div class="absolute inset-0 bg-primary/5 animate-pulse"></div>
-          <span class="material-symbols-outlined !text-[56px] text-primary relative z-10">campaign</span>
+          <span class="material-symbols-outlined text-[56px]! text-primary relative z-10">campaign</span>
         </div>
         <h2 class="font-headline-md text-[22px] text-on-background mb-sm tracking-tight">Canal de anuncios</h2>
-        <p class="font-body-base text-on-surface-variant max-w-[280px]">
+        <p class="font-body-base text-on-surface-variant max-w-70">
           Los anuncios del curso aparecerán aquí. Solo los profesores pueden publicar.
         </p>
       </div>
@@ -34,9 +34,9 @@
                 }
                 <span class="text-body-sm font-bold text-on-background">{{ ann.title }}</span>
                 @if (ann.priority === 'URGENT') {
-                <span class="px-xs py-[2px] bg-error/20 text-error text-[10px] font-bold rounded">URGENTE</span>
+                <span class="px-xs py-0.5 bg-error/20 text-error text-[10px] font-bold rounded">URGENTE</span>
                 } @else if (ann.priority === 'HIGH') {
-                <span class="px-xs py-[2px] bg-warning/20 text-warning text-[10px] font-bold rounded">ALTA</span>
+                <span class="px-xs py-0.5 bg-warning/20 text-warning text-[10px] font-bold rounded">ALTA</span>
                 }
               </div>
               <p class="text-body-sm text-on-surface-variant">{{ ann.content }}</p>
@@ -74,10 +74,10 @@
         <div
           class="w-32 h-32 rounded-full bg-surface-container-low border border-outline-variant flex items-center justify-center mb-lg relative overflow-hidden">
           <div class="absolute inset-0 bg-primary/5 animate-pulse"></div>
-          <span class="material-symbols-outlined !text-[56px] text-primary relative z-10">chat_bubble</span>
+          <span class="material-symbols-outlined text-[56px]! text-primary relative z-10">chat_bubble</span>
         </div>
         <h2 class="font-headline-md text-[22px] text-on-background mb-sm tracking-tight">Chat del curso</h2>
-        <p class="font-body-base text-on-surface-variant max-w-[280px]">
+        <p class="font-body-base text-on-surface-variant max-w-70">
           El chat del curso aparecerá aquí. Envía un mensaje para comenzar la conversación con tus compañeros.
         </p>
       </div>
@@ -149,14 +149,14 @@
   @case ('TASKS') {
   <div class="flex-1 flex flex-col items-center justify-center p-xl relative overflow-y-auto">
     <div class="absolute inset-0 dot-grid-bg pointer-events-none"></div>
-    <div class="fade-in max-w-[448px] w-full flex flex-col items-center text-center">
+    <div class="fade-in max-w-112 w-full flex flex-col items-center text-center">
       <div
         class="w-32 h-32 rounded-full bg-surface-container-low border border-outline-variant flex items-center justify-center mb-lg relative overflow-hidden">
         <div class="absolute inset-0 bg-primary/5 animate-pulse"></div>
-        <span class="material-symbols-outlined !text-[56px] text-primary relative z-10">assignment</span>
+        <span class="material-symbols-outlined text-[56px]! text-primary relative z-10">assignment</span>
       </div>
       <h2 class="font-headline-md text-[22px] text-on-background mb-sm tracking-tight">Tareas</h2>
-      <p class="font-body-base text-on-surface-variant max-w-[280px]">
+      <p class="font-body-base text-on-surface-variant max-w-70">
         Organiza las tareas y entregas del curso. Crea la primera tarea para comenzar.
       </p>
       <div class="mt-xl">
@@ -172,14 +172,14 @@
   @case ('RESOURCES') {
   <div class="flex-1 flex flex-col items-center justify-center p-xl relative overflow-y-auto">
     <div class="absolute inset-0 dot-grid-bg pointer-events-none"></div>
-    <div class="fade-in max-w-[448px] w-full flex flex-col items-center text-center">
+    <div class="fade-in max-w-112 w-full flex flex-col items-center text-center">
       <div
         class="w-32 h-32 rounded-full bg-surface-container-low border border-outline-variant flex items-center justify-center mb-lg relative overflow-hidden">
         <div class="absolute inset-0 bg-primary/5 animate-pulse"></div>
-        <span class="material-symbols-outlined !text-[56px] text-primary relative z-10">folder</span>
+        <span class="material-symbols-outlined text-[56px]! text-primary relative z-10">folder</span>
       </div>
       <h2 class="font-headline-md text-[22px] text-on-background mb-sm tracking-tight">Recursos</h2>
-      <p class="font-body-base text-on-surface-variant max-w-[280px]">
+      <p class="font-body-base text-on-surface-variant max-w-70">
         Aquí encontrarás el material de estudio del curso. Sube el primer recurso.
       </p>
       <div class="mt-xl">
@@ -195,14 +195,14 @@
   @case ('FORUM') {
   <div class="flex-1 flex flex-col items-center justify-center p-xl relative overflow-y-auto">
     <div class="absolute inset-0 dot-grid-bg pointer-events-none"></div>
-    <div class="fade-in max-w-[448px] w-full flex flex-col items-center text-center">
+    <div class="fade-in max-w-112 w-full flex flex-col items-center text-center">
       <div
         class="w-32 h-32 rounded-full bg-surface-container-low border border-outline-variant flex items-center justify-center mb-lg relative overflow-hidden">
         <div class="absolute inset-0 bg-primary/5 animate-pulse"></div>
-        <span class="material-symbols-outlined !text-[56px] text-primary relative z-10">forum</span>
+        <span class="material-symbols-outlined text-[56px]! text-primary relative z-10">forum</span>
       </div>
       <h2 class="font-headline-md text-[22px] text-on-background mb-sm tracking-tight">Foro de discusión</h2>
-      <p class="font-body-base text-on-surface-variant max-w-[280px]">
+      <p class="font-body-base text-on-surface-variant max-w-70">
         Participa en debates y discusiones del curso. Crea el primer tema para iniciar.
       </p>
       <div class="mt-xl">
@@ -218,14 +218,14 @@
   @case ('VOICE') {
   <div class="flex-1 flex flex-col items-center justify-center p-xl relative overflow-y-auto">
     <div class="absolute inset-0 dot-grid-bg pointer-events-none"></div>
-    <div class="fade-in max-w-[448px] w-full flex flex-col items-center text-center">
+    <div class="fade-in max-w-112 w-full flex flex-col items-center text-center">
       <div
         class="w-32 h-32 rounded-full bg-surface-container-low border border-outline-variant flex items-center justify-center mb-lg relative overflow-hidden">
         <div class="absolute inset-0 bg-primary/5 animate-pulse"></div>
-        <span class="material-symbols-outlined !text-[56px] text-primary relative z-10">mic</span>
+        <span class="material-symbols-outlined text-[56px]! text-primary relative z-10">mic</span>
       </div>
       <h2 class="font-headline-md text-[22px] text-on-background mb-sm tracking-tight">Canal de voz</h2>
-      <p class="font-body-base text-on-surface-variant max-w-[280px]">
+      <p class="font-body-base text-on-surface-variant max-w-70">
         Conéctate al canal de voz para hablar en tiempo real con tus compañeros y profesores.
       </p>
       <div class="mt-xl">
