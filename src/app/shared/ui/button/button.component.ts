@@ -14,7 +14,7 @@ export class ButtonComponent {
   fullWidth = input<boolean>(false);
 
   computedClasses = computed(() => {
-    const base = 'inline-flex items-center justify-center font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed';
+    const base = 'inline-flex items-center justify-center font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed active:scale-95';
     const size = 'h-10 px-4 py-2 text-body-base rounded-lg';
     const variants = {
       primary: 'bg-primary-container text-on-primary-container hover:bg-surface-tint border border-transparent',
