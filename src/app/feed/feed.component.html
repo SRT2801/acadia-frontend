@@ -1,19 +1,23 @@
 <div class="flex">
-  <div class="flex-1 min-w-0 max-w-176 mx-auto px-lg py-lg flex flex-col gap-lg">
-    <div class="flex items-center gap-2">
+  <div class="flex-1 min-w-0 max-w-4xl ml-0 lg:ml-auto mr-auto px-lg py-lg flex flex-col gap-lg">
+
+    <!-- User header -->
+    <div class="flex items-center gap-3 pl-0 lg:pl-24">
       <div class="w-10 h-10 rounded-full bg-primary-container/20 border border-primary flex items-center justify-center text-body-sm text-on-surface font-medium shrink-0">
         MC
       </div>
-      <span class="text-body-sm text-on-surface-variant">Marcus Chen</span>
-      <span class="text-body-sm text-on-surface-variant/50">@mchen_phd</span>
+      <div class="flex flex-col">
+        <span class="text-body-sm text-on-surface">Marcus Chen</span>
+        <span class="text-body-sm text-on-surface-variant">@mchen_phd</span>
+      </div>
     </div>
 
     <div>
-      <div class="flex items-center gap-2 mb-lg">
+      <div class="flex items-center gap-2 mb-lg lg:pl-24">
         <span class="text-headline-md text-on-surface">Academic Feed</span>
       </div>
 
-      <div class="flex items-center gap-1 border-b border-outline-variant pb-0.5 mb-lg overflow-x-auto">
+      <div class="flex items-center gap-1 border-b border-outline-variant pb-0.5 mb-lg overflow-x-auto lg:pl-24">
         <button class="px-3 py-1.5 rounded-lg text-body-sm text-on-surface bg-primary-container/20 transition-colors shrink-0">For you</button>
         <button class="px-3 py-1.5 rounded-lg text-body-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors shrink-0">Following</button>
         <button class="px-3 py-1.5 rounded-lg text-body-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors shrink-0">Research</button>
@@ -21,30 +25,32 @@
       </div>
     </div>
 
-    <div class="rounded-xl border border-outline-variant bg-surface-container-low p-md mb-lg">
+    <!-- Composer card -->
+    <div class="rounded-xl border border-[#2a2a2a] bg-[#1a1a1a] p-md mb-lg lg:pl-24">
       <div class="flex gap-3">
         <div class="w-10 h-10 rounded-full bg-primary-container/20 border border-primary flex items-center justify-center text-body-sm text-on-surface font-medium shrink-0">
           MC
         </div>
         <div class="flex-1 flex flex-col gap-3">
-          <input type="text" placeholder="What's on your mind?"
-            class="w-full bg-transparent border-0 text-body-base text-on-surface placeholder-on-surface-variant focus:outline-none" />
+          <label for="composer-input" class="text-body-sm text-on-surface font-medium cursor-pointer">¿Qué estás pensando?</label>
+          <input id="composer-input" type="text" placeholder=""
+            class="w-full bg-transparent border-0 text-body-base text-on-surface placeholder-on-surface-variant/60 focus:outline-none focus:ring-1 focus:ring-primary rounded-lg px-md py-sm -mx-md -my-sm" />
           <div class="flex items-center justify-between pt-3 border-t border-outline-variant">
             <div class="flex items-center gap-1">
-              <button class="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
+              <button class="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors active:scale-95">
                 <span class="material-symbols-outlined text-[18px]">image</span>
               </button>
-              <button class="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
+              <button class="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors active:scale-95">
                 <span class="material-symbols-outlined text-[18px]">attach_file</span>
               </button>
-              <button class="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
+              <button class="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors active:scale-95">
                 <span class="material-symbols-outlined text-[18px]">poll</span>
               </button>
-              <button class="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
+              <button class="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors active:scale-95">
                 <span class="material-symbols-outlined text-[18px]">sentiment_satisfied</span>
               </button>
             </div>
-            <button class="h-8 px-4 rounded-lg bg-primary-container text-on-primary-container text-body-sm font-medium hover:bg-primary/80 transition-colors border border-transparent">
+            <button class="h-8 px-4 rounded-lg bg-primary-container text-on-primary-container text-body-sm font-medium hover:bg-primary/80 transition-colors active:scale-95 border border-transparent">
               Post
             </button>
           </div>
@@ -52,8 +58,9 @@
       </div>
     </div>
 
+    <!-- Posts -->
     @for (post of posts; track post.id) {
-      <div class="rounded-xl border border-outline-variant bg-surface-container-low p-md fade-in">
+      <div class="rounded-xl border border-[#2a2a2a] bg-[#1a1a1a] p-md mb-lg fade-in lg:pl-24">
         <div class="flex items-start justify-between mb-3">
           <div class="flex items-center gap-3">
             <div
@@ -76,7 +83,7 @@
               </div>
             </div>
           </div>
-          <button class="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
+          <button class="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors active:scale-95">
             <span class="material-symbols-outlined text-[18px]">more_horiz</span>
           </button>
         </div>
@@ -84,40 +91,40 @@
         <p class="text-body-base text-on-surface mb-3 leading-relaxed">{{ post.content }}</p>
 
         @if (post.attachments.length > 0) {
-          <div class="flex items-center gap-3 rounded-lg border border-outline-variant bg-surface-container-high p-3 mb-3">
-            <span class="material-symbols-outlined text-[20px] text-on-surface-variant">description</span>
+          <div class="flex items-center gap-3 rounded-lg border border-[#2a2a2a] bg-[#0f0f0f] p-3 mb-3">
+            <span class="material-symbols-outlined text-[20px] text-on-surface-variant shrink-0">description</span>
             <div class="flex-1 min-w-0">
               <p class="text-body-sm text-on-surface truncate">{{ post.attachments[0].name }}</p>
-              <p class="text-body-sm text-on-surface-variant">{{ post.attachments[0].size }} • PDF Document</p>
+              <p class="text-body-sm text-on-surface-variant">{{ post.attachments[0].size }} · PDF Document</p>
             </div>
-            <button class="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
+            <button class="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors active:scale-95 shrink-0">
               <span class="material-symbols-outlined text-[18px]">download</span>
             </button>
           </div>
         }
 
         <div class="flex items-center gap-1 pt-3 border-t border-outline-variant">
-          <button class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
+          <button class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors active:scale-95">
             <span class="material-symbols-outlined text-[16px]">chat_bubble</span>
             <span>{{ post.comments }}</span>
           </button>
-          <button class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
+          <button class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors active:scale-95">
             <span class="material-symbols-outlined text-[16px]">rebase_edit</span>
             <span>{{ post.edits }}</span>
           </button>
-          <button class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
+          <button class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors active:scale-95">
             <span class="material-symbols-outlined text-[16px]">favorite</span>
             <span>{{ post.likes }}</span>
           </button>
-          <button class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
+          <button class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors active:scale-95">
             <span class="material-symbols-outlined text-[16px]">bar_chart</span>
             <span>{{ post.views }}</span>
           </button>
           <div class="flex-1"></div>
-          <button class="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
+          <button class="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors active:scale-95">
             <span class="material-symbols-outlined text-[18px]">bookmark</span>
           </button>
-          <button class="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors">
+          <button class="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors active:scale-95">
             <span class="material-symbols-outlined text-[18px]">share</span>
           </button>
         </div>
