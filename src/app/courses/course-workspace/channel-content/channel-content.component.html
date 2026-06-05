@@ -47,7 +47,7 @@
           <div cdkDropList [cdkDropListData]="getAnnouncementsByPriority(priority)"
             [cdkDropListConnectedTo]="getConnectedLists(priority)"
             (cdkDropListDropped)="onDrop($event, priority)"
-            class="flex flex-col gap-sm overflow-y-auto custom-scrollbar pr-1 flex-1 min-h-[100px]">
+            class="flex flex-col gap-sm overflow-y-auto custom-scrollbar pr-1 flex-1 min-h-25">
             @for (ann of getAnnouncementsByPriority(priority); track trackByAnnouncement($index, ann)) {
             <div cdkDrag [cdkDragData]="ann" [cdkDragDisabled]="!canMoveAnnouncement(ann)" class="cursor-grab active:cursor-grabbing">
               @if (priority === 'URGENT') {
@@ -83,7 +83,7 @@
                     }
                   </div>
                 </div>
-                
+
                 <h3 class="text-[14px] font-bold mb-xs text-on-error-container leading-tight">{{ ann.title }}</h3>
                 <p class="text-[13px] text-on-surface line-clamp-3">{{ ann.content }}</p>
                 <div class="flex items-center gap-xs mt-sm">
