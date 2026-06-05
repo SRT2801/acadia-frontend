@@ -19,7 +19,7 @@
             <span class="material-symbols-outlined text-[18px]">link</span>
             INVITAR
           </button>
-          
+
         }
       </div>
     </div>
@@ -28,7 +28,7 @@
     @if (loading()) {
       <div class="space-y-sm">
         @for (i of [1,2,3,4]; track i) {
-          <div class="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg p-md flex items-center gap-md">
+          <div class="bg-[#1a1a1a] border border-surface-container-high rounded-lg p-md flex items-center gap-md">
             <div class="shimmer w-10 h-10 rounded-full"></div>
             <div class="flex-1 space-y-xs">
               <div class="shimmer h-4 w-40 rounded"></div>
@@ -52,7 +52,7 @@
     @if (!loading() && members().length > 0) {
       <div class="flex flex-col gap-sm">
         @for (member of members(); track member.id; let i = $index) {
-          <div class="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg p-md
+          <div class="bg-[#1a1a1a] border border-surface-container-high rounded-lg p-md
                       flex items-center justify-between hover:bg-surface-container-low transition-colors group">
 
             <!-- Left: Avatar + Info -->
@@ -76,11 +76,11 @@
             <!-- Right: Role -->
             <div class="flex items-center gap-md">
               @if (isOwner(member)) {
-                <span class="bg-primary-container text-on-primary-fixed font-label-caps text-[10px] px-sm py-[2px] rounded uppercase font-bold tracking-wider">
+                <span class="bg-primary-container text-on-primary-fixed font-label-caps text-[10px] px-sm py-0.5 rounded uppercase font-bold tracking-wider">
                   OWNER
                 </span>
               } @else {
-                <span class="bg-surface-container-highest text-on-surface-variant font-label-caps text-[10px] px-sm py-[2px] rounded uppercase font-bold tracking-wider">
+                <span class="bg-surface-container-highest text-on-surface-variant font-label-caps text-[10px] px-sm py-0.5 rounded uppercase font-bold tracking-wider">
                   {{ member.role }}
                 </span>
               }
@@ -103,13 +103,13 @@
 
       <!-- Code Display -->
       <div class="flex items-center gap-sm">
-        <div class="flex-1 bg-[#0f0f0f] border border-[#2a2a2a] rounded-lg p-md flex items-center justify-center min-h-[56px]">
+        <div class="flex-1 bg-[#0f0f0f] border border-surface-container-high rounded-lg p-md flex items-center justify-center min-h-14">
           <span class="font-mono-code text-mono-code text-primary font-bold text-2xl tracking-[0.3em] uppercase">
             {{ invitation()!.code }}
           </span>
         </div>
         <button (click)="copyCode()"
-                class="h-12 px-4 bg-surface-container-high hover:bg-surface-container text-on-surface rounded-lg border border-[#2a2a2a] transition-all flex items-center gap-xs shrink-0"
+                class="h-12 px-4 bg-surface-container-high hover:bg-surface-container text-on-surface rounded-lg border border-surface-container-high transition-all flex items-center gap-xs shrink-0"
                 [class.bg-secondary]="copying()"
                 [class.text-on-secondary]="copying()">
           <span class="material-symbols-outlined">{{ copying() ? 'check' : 'content_copy' }}</span>
@@ -130,7 +130,7 @@
       </div>
 
       <!-- Footer Note -->
-      <div class="bg-surface-container-low p-md rounded-lg border border-[#2a2a2a] flex items-center gap-sm">
+      <div class="bg-surface-container-low p-md rounded-lg border border-surface-container-high flex items-center gap-sm">
         <span class="material-symbols-outlined text-primary-container text-lg">info</span>
         <p class="text-body-sm text-on-surface-variant">
           Los nuevos miembros entrarán con el rol de <strong>STUDENT</strong> por defecto.
