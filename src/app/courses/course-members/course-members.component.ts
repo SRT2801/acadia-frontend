@@ -6,11 +6,12 @@ import { CoursesService, CourseMember, Invitation } from '../../shared/services/
 import { AuthService } from '../../shared/services/auth.service';
 import { AlertService } from '../../shared/services/alert.service';
 import { ModalComponent } from '../../shared/ui/modal/modal.component';
+import { SkeletonComponent } from '../../shared/ui/skeleton/skeleton.component';
 
 @Component({
   selector: 'app-course-members',
   standalone: true,
-  imports: [CommonModule, FormsModule, ModalComponent],
+  imports: [CommonModule, FormsModule, ModalComponent, SkeletonComponent],
   templateUrl: './course-members.component.html',
   host: {
     class: 'flex-1 flex flex-col min-h-0',

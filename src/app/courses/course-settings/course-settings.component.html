@@ -1,98 +1,146 @@
 <div class="flex-1 overflow-y-auto w-full">
-  <div class="w-full max-w-[512px] mx-auto py-xl px-lg">
+  <div class="max-w-4xl mx-auto w-full px-lg py-xl space-y-xl pb-32">
 
     @if (loading()) {
-      <div class="flex justify-center py-xl">
-        <div class="spinner"></div>
+      <div class="space-y-xl">
+        <div class="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-lg space-y-lg">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+            <div class="space-y-xs">
+              <div class="shimmer h-3 w-16 rounded"></div>
+              <div class="shimmer h-10 w-full rounded-lg"></div>
+            </div>
+            <div class="space-y-xs">
+              <div class="shimmer h-3 w-12 rounded"></div>
+              <div class="shimmer h-10 w-full rounded-lg"></div>
+            </div>
+            <div class="md:col-span-2 space-y-xs">
+              <div class="shimmer h-3 w-24 rounded"></div>
+              <div class="shimmer h-20 w-full rounded-lg"></div>
+            </div>
+            <div class="space-y-xs">
+              <div class="shimmer h-3 w-14 rounded"></div>
+              <div class="shimmer h-10 w-full rounded-lg"></div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-lg space-y-lg">
+          <div class="shimmer h-4 w-32 rounded"></div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+            @for (i of [1,2,3,4]; track i) {
+              <div class="shimmer h-12 w-full rounded-lg"></div>
+            }
+          </div>
+        </div>
       </div>
     }
 
     @if (!loading() && course()) {
 
-      <!-- Info del curso -->
-      <div class="bg-surface-container-low border border-outline-variant rounded-xl p-lg mb-lg">
-        <h2 class="text-label-caps text-on-surface-variant mb-md">Información general</h2>
-        <form (ngSubmit)="saveCourse()" class="flex flex-col gap-md">
-          <div class="flex flex-col gap-sm">
-            <label class="text-body-sm text-on-surface-variant">Nombre</label>
-            <input ui-input [(ngModel)]="courseForm.name" name="name" placeholder="Nombre del curso" />
-          </div>
-          <div class="flex flex-col gap-sm">
-            <label class="text-body-sm text-on-surface-variant">Código</label>
-            <input ui-input [(ngModel)]="courseForm.code" name="code" placeholder="PROG2-2026" />
-          </div>
-          <div class="flex flex-col gap-sm">
-            <label class="text-body-sm text-on-surface-variant">Descripción</label>
-            <textarea ui-input [(ngModel)]="courseForm.description" name="description"
-                      rows="3" placeholder="Descripción opcional"></textarea>
-          </div>
-          <div class="flex flex-col gap-sm">
-            <label class="text-body-sm text-on-surface-variant">Semestre</label>
-            <input ui-input [(ngModel)]="courseForm.semester" name="semester" placeholder="2026-1" />
-          </div>
-          <div>
-            <button ui-button type="submit" [disabled]="savingCourse()">
-              {{ savingCourse() ? 'Guardando...' : 'Guardar cambios' }}
-            </button>
-          </div>
-        </form>
-      </div>
-
-      <!-- Espacio académico -->
-      <div class="bg-surface-container-low border border-outline-variant rounded-xl p-lg mb-lg">
-        <h2 class="text-label-caps text-on-surface-variant mb-md">Espacio académico</h2>
-        <form (ngSubmit)="saveSpace()" class="flex flex-col gap-md">
-          <div class="flex flex-col gap-sm">
-            <label class="text-body-sm text-on-surface-variant">Visibilidad</label>
-            <select [(ngModel)]="spaceForm.visibility" name="visibility"
-                    class="bg-surface-container-high rounded-md px-md py-sm border border-outline-variant outline-none
-                           text-body-base text-on-surface w-full cursor-pointer">
-              <option value="PUBLIC">Público — Visible para todos</option>
-              <option value="PRIVATE">Privado — Solo miembros</option>
-              <option value="UNLISTED">Oculto — Solo con enlace directo</option>
-            </select>
-          </div>
-
-          <div class="flex flex-col gap-sm">
-            <label class="flex items-center gap-sm cursor-pointer">
-              <input type="checkbox" [(ngModel)]="spaceForm.allowStudentPosts" name="allowStudentPosts" class="accent-primary" />
-              <span class="text-body-sm">Permitir publicaciones de estudiantes</span>
-            </label>
-            <label class="flex items-center gap-sm cursor-pointer">
-              <input type="checkbox" [(ngModel)]="spaceForm.allowFileUploads" name="allowFileUploads" class="accent-primary" />
-              <span class="text-body-sm">Permitir subida de archivos</span>
-            </label>
-            <label class="flex items-center gap-sm cursor-pointer">
-              <input type="checkbox" [(ngModel)]="spaceForm.allowVoiceChannels" name="allowVoiceChannels" class="accent-primary" />
-              <span class="text-body-sm">Permitir canales de voz</span>
-            </label>
-            <label class="flex items-center gap-sm cursor-pointer">
-              <input type="checkbox" [(ngModel)]="spaceForm.showLeaderboard" name="showLeaderboard" class="accent-primary" />
-              <span class="text-body-sm">Mostrar leaderboard</span>
-            </label>
-          </div>
-
-          <div>
-            <button ui-button type="submit" [disabled]="savingSpace()">
-              {{ savingSpace() ? 'Guardando...' : 'Guardar configuración' }}
-            </button>
-          </div>
-        </form>
-      </div>
-
-      @if (canDelete()) {
-        <!-- Danger zone -->
-        <div class="bg-surface-container-low border border-error/30 rounded-xl p-lg">
-          <h2 class="text-label-caps text-error mb-md">Zona de peligro</h2>
-          <p class="text-body-sm text-on-surface-variant mb-md">
-            Esta acción es irreversible. Se eliminará el curso, el espacio académico,
-            todos los canales, miembros e invitaciones asociadas.
-          </p>
-          <button ui-button variant="ghost" class="text-error border-error!" (click)="confirmDelete()">
-            <span class="material-symbols-outlined mr-xs">delete</span>
-            Eliminar materia
-          </button>
+      <!-- INFORMACIÓN GENERAL -->
+      <section class="space-y-sm">
+        <h3 class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-widest opacity-60">Información General</h3>
+        <div class="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-lg space-y-lg">
+          <form (ngSubmit)="saveCourse()" class="flex flex-col gap-lg">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+              <div class="flex flex-col gap-xs">
+                <label class="font-label-caps text-label-caps text-on-surface-variant">Nombre</label>
+                <input [(ngModel)]="courseForm.name" name="name" placeholder="Nombre del curso"
+                  class="w-full h-10 bg-[#0f0f0f] border border-[#2a2a2a] rounded-lg px-md text-body-base text-on-surface focus:border-primary outline-none transition-colors placeholder:text-on-surface-variant/60" />
+              </div>
+              <div class="flex flex-col gap-xs">
+                <label class="font-label-caps text-label-caps text-on-surface-variant">Código</label>
+                <input [(ngModel)]="courseForm.code" name="code" placeholder="PROG2-2026"
+                  class="w-full h-10 bg-[#0f0f0f] border border-[#2a2a2a] rounded-lg px-md text-body-base text-on-surface focus:border-primary outline-none transition-colors placeholder:text-on-surface-variant/60" />
+              </div>
+              <div class="md:col-span-2 flex flex-col gap-xs">
+                <label class="font-label-caps text-label-caps text-on-surface-variant">Descripción</label>
+                <textarea [(ngModel)]="courseForm.description" name="description" rows="3" placeholder="Descripción opcional"
+                  class="w-full bg-[#0f0f0f] border border-[#2a2a2a] rounded-lg p-md text-body-base text-on-surface focus:border-primary outline-none transition-colors resize-none placeholder:text-on-surface-variant/60"></textarea>
+              </div>
+              <div class="flex flex-col gap-xs">
+                <label class="font-label-caps text-label-caps text-on-surface-variant">Semestre</label>
+                <input [(ngModel)]="courseForm.semester" name="semester" placeholder="2026-1"
+                  class="w-full h-10 bg-[#0f0f0f] border border-[#2a2a2a] rounded-lg px-md text-body-base text-on-surface focus:border-primary outline-none transition-colors placeholder:text-on-surface-variant/60" />
+              </div>
+            </div>
+            <div class="flex justify-end pt-md border-t border-outline-variant">
+              <button type="submit" [disabled]="savingCourse()"
+                class="bg-transparent border border-outline-variant text-on-surface px-lg py-2 rounded-lg text-body-base hover:bg-surface-container-high transition-colors active:scale-95 disabled:opacity-50">
+                {{ savingCourse() ? 'Guardando...' : 'Guardar cambios' }}
+              </button>
+            </div>
+          </form>
         </div>
+      </section>
+
+      <div class="border-b border-outline-variant opacity-30"></div>
+
+      <!-- ESPACIO ACADÉMICO -->
+      <section class="space-y-sm">
+        <h3 class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-widest opacity-60">Espacio Académico</h3>
+        <div class="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-lg space-y-lg">
+          <form (ngSubmit)="saveSpace()" class="flex flex-col gap-lg">
+            <div class="flex flex-col gap-xs">
+              <label class="font-label-caps text-label-caps text-on-surface-variant">Visibilidad</label>
+              <select [(ngModel)]="spaceForm.visibility" name="visibility"
+                class="w-full h-10 bg-[#0f0f0f] border border-[#2a2a2a] rounded-lg px-md text-body-base text-on-surface focus:border-primary outline-none transition-colors appearance-none cursor-pointer">
+                <option value="PRIVATE">Privado</option>
+                <option value="PUBLIC">Público</option>
+                <option value="UNLISTED">Oculto — Solo con enlace directo</option>
+              </select>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+              <label class="flex items-center gap-md p-md bg-[#0f0f0f] border border-[#2a2a2a] rounded-lg cursor-pointer hover:border-primary/50 transition-colors">
+                <input type="checkbox" [(ngModel)]="spaceForm.allowStudentPosts" name="allowStudentPosts"
+                  class="w-5 h-5 rounded border-outline-variant bg-background text-primary focus:ring-primary focus:ring-offset-0 accent-primary" />
+                <span class="text-body-base text-on-surface">Permitir publicaciones de estudiantes</span>
+              </label>
+              <label class="flex items-center gap-md p-md bg-[#0f0f0f] border border-[#2a2a2a] rounded-lg cursor-pointer hover:border-primary/50 transition-colors">
+                <input type="checkbox" [(ngModel)]="spaceForm.allowFileUploads" name="allowFileUploads"
+                  class="w-5 h-5 rounded border-outline-variant bg-background text-primary focus:ring-primary focus:ring-offset-0 accent-primary" />
+                <span class="text-body-base text-on-surface">Permitir subida de archivos</span>
+              </label>
+              <label class="flex items-center gap-md p-md bg-[#0f0f0f] border border-[#2a2a2a] rounded-lg cursor-pointer hover:border-primary/50 transition-colors">
+                <input type="checkbox" [(ngModel)]="spaceForm.allowVoiceChannels" name="allowVoiceChannels"
+                  class="w-5 h-5 rounded border-outline-variant bg-background text-primary focus:ring-primary focus:ring-offset-0 accent-primary" />
+                <span class="text-body-base text-on-surface">Permitir canales de voz</span>
+              </label>
+              <label class="flex items-center gap-md p-md bg-[#0f0f0f] border border-[#2a2a2a] rounded-lg cursor-pointer hover:border-primary/50 transition-colors">
+                <input type="checkbox" [(ngModel)]="spaceForm.showLeaderboard" name="showLeaderboard"
+                  class="w-5 h-5 rounded border-outline-variant bg-background text-primary focus:ring-primary focus:ring-offset-0 accent-primary" />
+                <span class="text-body-base text-on-surface">Mostrar leaderboard</span>
+              </label>
+            </div>
+
+            <div class="flex justify-end pt-md border-t border-outline-variant">
+              <button type="submit" [disabled]="savingSpace()"
+                class="bg-transparent border border-outline-variant text-on-surface px-lg py-2 rounded-lg text-body-base hover:bg-surface-container-high transition-colors active:scale-95 disabled:opacity-50">
+                {{ savingSpace() ? 'Guardando...' : 'Guardar configuración' }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <div class="border-b border-outline-variant opacity-30"></div>
+
+      <!-- ZONA DE PELIGRO -->
+      @if (canDelete()) {
+        <section class="space-y-sm">
+          <h3 class="font-label-caps text-label-caps text-error uppercase tracking-widest">Zona de Peligro</h3>
+          <div class="bg-[#1a1a1a] border border-error/30 rounded-xl p-lg flex items-center justify-between">
+            <div class="space-y-xs max-w-lg">
+              <p class="text-body-base text-on-surface font-semibold">Eliminar esta materia</p>
+              <p class="text-body-sm text-on-surface-variant">Esta acción es irreversible. Se eliminará la materia, el espacio académico, todos los canales, miembros e invitaciones.</p>
+            </div>
+            <button (click)="confirmDelete()"
+              class="flex items-center gap-sm bg-error-container text-error px-lg py-2 rounded-lg text-body-base hover:bg-error-container/80 transition-all active:scale-95 border border-error/20">
+              <span class="material-symbols-outlined text-[18px]">delete</span>
+              Eliminar materia
+            </button>
+          </div>
+        </section>
       }
 
     }

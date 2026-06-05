@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ButtonComponent } from '../../shared/ui/button/button.component';
 import { InputDirective } from '../../shared/ui/input/input.directive';
+import { SkeletonComponent } from '../../shared/ui/skeleton/skeleton.component';
 import {
   CoursesService,
   Course,
@@ -16,7 +17,7 @@ import { AlertService } from '../../shared/services/alert.service';
 @Component({
   selector: 'app-course-settings',
   standalone: true,
-  imports: [CommonModule, FormsModule, ButtonComponent, InputDirective],
+  imports: [CommonModule, FormsModule, ButtonComponent, InputDirective, SkeletonComponent],
   templateUrl: './course-settings.component.html',
   host: {
     class: 'flex-1 flex flex-col min-h-0',

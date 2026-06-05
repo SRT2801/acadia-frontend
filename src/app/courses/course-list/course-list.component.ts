@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { ButtonComponent } from '../../shared/ui/button/button.component';
 import { InputDirective } from '../../shared/ui/input/input.directive';
 import { ModalComponent } from '../../shared/ui/modal/modal.component';
+import { SkeletonComponent } from '../../shared/ui/skeleton/skeleton.component';
 import { CoursesService, Course } from '../../shared/services/courses.service';
 import { AlertService } from '../../shared/services/alert.service';
 import { AuthService } from '../../shared/services/auth.service';
@@ -19,6 +20,7 @@ import { AuthService } from '../../shared/services/auth.service';
     ButtonComponent,
     InputDirective,
     ModalComponent,
+    SkeletonComponent,
   ],
   templateUrl: './course-list.component.html',
 })

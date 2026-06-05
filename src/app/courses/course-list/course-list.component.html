@@ -16,8 +16,14 @@
   </header>
 
   @if (loading()) {
-    <div class="flex justify-center py-16">
-      <div class="spinner"></div>
+    <div class="flex flex-col gap-md">
+      @for (i of [1,2,3]; track i) {
+        <div class="rounded-xl border border-outline-variant bg-surface-container-low p-lg animate-pulse">
+          <app-skeleton variant="text" width="80px" height="13px" />
+          <app-skeleton variant="title" width="60%" height="20px" class="mt-sm" />
+          <app-skeleton variant="text" width="40%" height="13px" class="mt-xs" />
+        </div>
+      }
     </div>
   }
 
@@ -42,13 +48,14 @@
   }
 
   @if (!loading() && courses().length > 0) {
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-md">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-md">
       @for (course of courses(); track course.id) {
         <button
-          class="card-border rounded-xl p-lg hover:bg-surface-container-high cursor-pointer transition-colors text-left w-full"
+          class="card-border rounded-xl p-lg hover:bg-surface-container-high cursor-pointer transition-colors text-left w-full group"
+          [class.md:col-span-2]="($index === 0)"
           (click)="navigateToCourse(course)">
           <div class="text-sm text-on-surface-variant mb-sm font-mono">{{ course.code }}</div>
-          <h3 class="text-headline-md mb-xs">{{ course.name }}</h3>
+          <h3 class="text-headline-md mb-xs group-hover:text-primary transition-colors">{{ course.name }}</h3>
           @if (course.semester) {
             <span class="text-body-sm text-on-surface-variant block mb-sm">{{ course.semester }}</span>
           }
